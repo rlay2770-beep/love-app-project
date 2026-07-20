@@ -32,6 +32,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden;
         }
 
         .app-container {
@@ -45,6 +46,7 @@
             flex-direction: column;
             overflow: hidden;
             position: relative;
+            z-index: 10;
         }
 
         /* Top Header */
@@ -112,11 +114,26 @@
         }
         .nav-item.active { color: var(--primary-color); }
         .nav-icon { font-size: 20px; }
+
+        /* 🎆 Heart Burst Canvas (ဖန်သားပြင်တစ်ခုလုံး နှလုံးသားကြဲမည့် နေရာ) */
+        #heartCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
     <div class="app-container">
+        <!-- Heart Burst Canvas Layer -->
+        <canvas id="heartCanvas"></canvas>
+
         <!-- App Header -->
         <div class="app-header">
             <h1>❤️ LOVE-APP</h1>
@@ -189,14 +206,9 @@
                     console.error(error);
                 }
             },
-            // စာမျက်နှာများ အပြန်အလှန် ပြောင်းလဲရန် Function
             switchView: function(viewId, targetBtn) {
-                // View Panel အားလုံးကို ဖျောက်မည်
                 document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
-                // ရွေးချယ်လိုက်သော Panel ကို ပြသမည်
                 document.getElementById('view-' + viewId).classList.add('active');
-                
-                // Navigation Active UI ပြောင်းလဲမည်
                 document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
                 targetBtn.classList.add('active');
             }
@@ -205,7 +217,76 @@
         // Smart Matching Engine Module
         window.loveAppMatch = {
             triggerFind: function() {
-                alert("💖 Smart Matching Engine ကို စတင်နေပါပြီ... (နောက်တစ်ဆင့်တွင် Logic များ ထည့်သွင်းပါမည်)");
+                // အောင်မြင်စွာ Match ဖြစ်သွားပြီဟု ယူဆကာ Visual Effect ကို လှမ်းခေါ်မည်
+                window.loveAppFx.triggerHeartBurst();
+            }
+        };
+
+        // 🎆 Visual Effects Module (Heart Burst Engine)
+        window.loveAppFx = {
+            triggerHeartBurst: function() {
+                const canvas = document.getElementById('heartCanvas');
+                const ctx = canvas.getContext('2d');
+                canvas.style.display = 'block';
+                
+                // Canvas အရွယ်အစားကို App Container အတိုင်း ညှိခြင်း
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = canvas.parentElement.clientHeight;
+
+                const hearts = [];
+                const colors = ['#ff4b72', '#ff7693', '#ff003c', '#ff8da1', '#ffb3c1'];
+
+                // နှလုံးသားအမှုန်အမွှား ၆၀ ဖန်တီးခြင်း
+                for (let i = 0; i < 60; i++) {
+                    hearts.push({
+                        x: canvas.width / 2,
+                        y: canvas.height / 2,
+                        size: Math.random() * 8 + 6,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        speedX: (Math.random() - 0.5) * 8,
+                        speedY: (Math.random() - 0.5) * 8 - 3, // အပေါ်သို့ ပင့်တက်စေရန်
+                        opacity: 1
+                    });
+                }
+
+                let animationFrame;
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    let alive = false;
+
+                    hearts.forEach(h => {
+                        if (h.opacity > 0) {
+                            alive = true;
+                            h.x += h.speedX;
+                            h.y += h.speedY;
+                            h.opacity -= 0.015; // တဖြည်းဖြည်း မှေးမှိန်ပျောက်ကွယ်စေရန်
+                            
+                            // Canvas ပေါ်တွင် နှလုံးသားပုံစံ Vector ဆွဲခြင်း
+                            ctx.save();
+                            ctx.globalAlpha = h.opacity;
+                            ctx.beginPath();
+                            ctx.fillStyle = h.color;
+                            
+                            // Heart Vector Equations
+                            ctx.translate(h.x, h.y);
+                            ctx.moveTo(0, 0);
+                            ctx.bezierCurveTo(-h.size / 2, -h.size / 2, -h.size, h.size / 3, 0, h.size);
+                            ctx.bezierCurveTo(h.size, h.size / 3, h.size / 2, -h.size / 2, 0, 0);
+                            
+                            ctx.fill();
+                            ctx.restore();
+                        }
+                    });
+
+                    if (alive) {
+                        animationFrame = requestAnimationFrame(animate);
+                    } else {
+                        cancelAnimationFrame(animationFrame);
+                        canvas.style.display = 'none';
+                    }
+                }
+
+                animate();
             }
         };
 
@@ -214,5 +295,4 @@
     </script>
 
 </body>
-    </html>
-    
+</html>
