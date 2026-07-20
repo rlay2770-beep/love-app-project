@@ -3,68 +3,169 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love-App Next-Gen (GitHub Cloud Setup)</title>
+    <title>Love-App Next-Gen (Premium Dashboard)</title>
     
     <!-- ⚡ Firebase Standard SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
+    <!-- 🎨 Love-App Premium UI CSS -->
     <style>
         :root {
             --primary-color: #ff4b72;
+            --accent-color: #ff7693;
             --background-color: #fffafb;
             --text-color: #2d2123;
+            --card-bg: #ffffff;
         }
+        
+        * { box-sizing: border-box; }
+        
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
             margin: 0;
             padding: 0;
             display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            height: 92vh;
+            background: var(--card-bg);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Top Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .app-header h1 { margin: 0; font-size: 22px; letter-spacing: 1px; }
+        .engine-status { font-size: 11px; opacity: 0.9; margin-top: 4px; }
+
+        /* Main Content Viewport */
+        .app-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
         }
-        .app-container {
-            width: 90%;
-            max-width: 400px;
-            background: #ffffff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-radius: 20px;
-            padding: 30px 20px;
-            text-align: center;
-        }
-        h1 {
-            color: var(--primary-color);
-            font-size: 26px;
-            margin-bottom: 5px;
-        }
-        .status-badge {
-            background-color: #ffeef1;
-            color: var(--primary-color);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            display: inline-block;
-            margin-top: 20px;
+
+        .view-panel { display: none; width: 100%; text-align: center; }
+        .view-panel.active { display: block; }
+
+        /* Feature Card Components */
+        .feature-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 15px;
             font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 75, 114, 0.3);
+            transition: transform 0.2s;
+            margin-top: 15px;
         }
+        .feature-btn:active { transform: scale(0.95); }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            height: 70px;
+            background: #ffffff;
+            border-top: 1px solid #f0e2e4;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .nav-item {
+            background: none;
+            border: none;
+            color: #8c7b7d;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .nav-item.active { color: var(--primary-color); }
+        .nav-icon { font-size: 20px; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <h1>❤️ LOVE-APP</h1>
-        <p style="color: #666; margin: 0;">Project Gold Engine</p>
-        
-        <div class="status-badge" id="appStatus">Connecting Cloud... ⏳</div>
+        <!-- App Header -->
+        <div class="app-header">
+            <h1>❤️ LOVE-APP</h1>
+            <div class="engine-status" id="appStatus">Cloud Connecting... ⏳</div>
+        </div>
+
+        <!-- Main Content (မျက်နှာပြင်များ) -->
+        <div class="app-content">
+            
+            <!-- ၁။ Discover/Match Page -->
+            <div id="view-discover" class="view-panel active">
+                <h3>Find Your Match</h3>
+                <p style="color: #666;">စိတ်ဝင်စားမှုတူသူများကို ရှာဖွေပါ။</p>
+                <button class="feature-btn" onclick="window.loveAppMatch.triggerFind()">Start Matching 🚀</button>
+            </div>
+
+            <!-- ၂။ Chat Page -->
+            <div id="view-chat" class="view-panel">
+                <h3>Intimate Chat Room</h3>
+                <p style="color: #666;">လုံခြုံစိတ်ချရသော သီးသန့်စကားပြောခန်း</p>
+                <button class="feature-btn">Open Messages 💬</button>
+            </div>
+
+            <!-- ၃။ Profile/Verification Page -->
+            <div id="view-profile" class="view-panel">
+                <h3>Verified Profile</h3>
+                <p style="color: #666;">အကောင့်စစ်မှန်ကြောင်း အတည်ပြုရန်</p>
+                <button class="feature-btn">Selfie Verify 📸</button>
+            </div>
+
+        </div>
+
+        <!-- Bottom Navigation Menu -->
+        <div class="bottom-nav">
+            <button class="nav-item active" onclick="window.loveAppCore.switchView('discover', this)">
+                <span class="nav-icon">✨</span><span>Discover</span>
+            </button>
+            <button class="nav-item" onclick="window.loveAppCore.switchView('chat', this)">
+                <span class="nav-icon">💬</span><span>Chats</span>
+            </button>
+            <button class="nav-item" onclick="window.loveAppCore.switchView('profile', this)">
+                <span class="nav-icon">👤</span><span>Profile</span>
+            </button>
+        </div>
     </div>
 
+    <!-- ⚙️ JavaScript Engine -->
     <script>
-        // ကုတ်ဟောင်းများနှင့် လုံးဝမငြိစေရန် သီးသန့် ကာကွယ်ထားသော စနစ်သစ်
+        // Core Architecture & State Management
         window.loveAppCore = {
             config: {
                 apiKey: "AIzaSyAs-YOUR-ACTUAL-API-KEY", // သင်၏ မူရင်း API Key ကို ဤနေရာတွင် ထည့်ပါ
@@ -76,32 +177,42 @@
             },
             init: function() {
                 const statusElement = document.getElementById('appStatus');
-                
                 try {
                     if (!firebase.apps.length) {
                         firebase.initializeApp(this.config);
                     }
                     this.db = firebase.firestore();
                     this.auth = firebase.auth();
-                    
-                    statusElement.innerText = "💖 Love-App Cloud Engine Ready!";
-                    console.log("💖 Engine successfully initialized on GitHub Cloud.");
+                    statusElement.innerText = "⚡ Project Gold Engine Ready";
                 } catch (error) {
-                    statusElement.innerText = "❌ Firebase Connection Error";
+                    statusElement.innerText = "❌ Connection Error";
                     console.error(error);
                 }
+            },
+            // စာမျက်နှာများ အပြန်အလှန် ပြောင်းလဲရန် Function
+            switchView: function(viewId, targetBtn) {
+                // View Panel အားလုံးကို ဖျောက်မည်
+                document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
+                // ရွေးချယ်လိုက်သော Panel ကို ပြသမည်
+                document.getElementById('view-' + viewId).classList.add('active');
+                
+                // Navigation Active UI ပြောင်းလဲမည်
+                document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+                targetBtn.classList.add('active');
             }
         };
 
-        // အခြား Module များကို စနစ်တကျ သီးသန့်နေရာချထားခြင်း
-        window.loveAppMatch = {};
-        window.loveAppFx    = {};
-        window.loveAppChat  = {};
+        // Smart Matching Engine Module
+        window.loveAppMatch = {
+            triggerFind: function() {
+                alert("💖 Smart Matching Engine ကို စတင်နေပါပြီ... (နောက်တစ်ဆင့်တွင် Logic များ ထည့်သွင်းပါမည်)");
+            }
+        };
 
-        // စတင် Run ပါမည်
+        // စနစ်အားလုံးကို စတင်မောင်းနှင်ခြင်း
         window.loveAppCore.init();
     </script>
 
 </body>
-  </html>
-  
+    </html>
+    
