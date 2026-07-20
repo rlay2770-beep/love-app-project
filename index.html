@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>True Love Security Connect</title>
+    <title>True Love - Advanced Security Core</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -18,10 +18,9 @@
             --card-bg: #ffffff;
         }
         
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
         
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
             background-color: #f0f2f5;
             color: var(--text-color);
             margin: 0; padding: 0;
@@ -38,7 +37,7 @@
             overflow: hidden; position: relative;
         }
 
-        /* 🔐 Login & PIN Screen CSS */
+        /* 🔐 ၁/ ပထမစာမျက်နှာ - Login Screen (အမည်နှင့် စိတ်ကြိုက် PIN သတ်မှတ်/ပြန်ဝင်ခြင်း) */
         .auth-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: white; z-index: 2000;
@@ -48,27 +47,48 @@
         .safety-banner {
             background: #fff0f3; color: var(--primary-color);
             padding: 15px; border-radius: 15px; border: 1px solid #ffe0e6;
-            font-size: 14px; line-height: 1.6; margin-bottom: 30px; font-weight: bold;
+            font-size: 14px; line-height: 1.6; margin-bottom: 25px; font-weight: bold;
+        }
+        .auth-input {
+            width: 85%; padding: 12px; font-size: 16px; border: 2px solid #ddd; border-radius: 12px;
+            outline: none; margin-bottom: 15px; text-align: center;
         }
         .pin-input {
-            width: 80%; padding: 15px; font-size: 20px; text-align: center;
-            letter-spacing: 10px; border: 2px solid #ddd; border-radius: 15px;
-            outline: none; margin-bottom: 20px;
+            width: 85%; padding: 12px; font-size: 22px; text-align: center;
+            letter-spacing: 8px; border: 2px solid #ddd; border-radius: 12px; outline: none; margin-bottom: 20px;
         }
 
-        /* Main App CSS */
+        /* App Header */
         .app-header {
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             color: white; padding: 20px; text-align: center; font-weight: bold;
         }
         .app-header h1 { margin: 0; font-size: 18px; }
 
-        .app-content { flex: 1; padding: 20px; overflow-y: auto; }
+        .app-content { flex: 1; padding: 20px; overflow-y: auto; position: relative; }
         .view-panel { display: none; width: 100%; height: 100%; }
         .view-panel.active { display: block; }
 
+        /* 🔍 ဒုတိယစာမျက်နှာ - Search Bar & Chats Layout */
+        .search-wrapper { display: flex; align-items: center; background: #f0f2f5; border-radius: 20px; padding: 8px 15px; margin-bottom: 12px; }
+        .search-input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; margin-left: 5px; }
+        .chat-list-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
+        .chat-list-item:hover { background: #fff0f3; }
+        
+        /* Active Active Chat View Inside Panel 2 */
         .chat-box { width: 100%; border: 1px solid #f0e2e4; border-radius: 15px; height: 260px; padding: 10px; margin-bottom: 10px; background: #fafafa; overflow-y: auto; }
-        .chat-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
+        
+        /* 💬 Message Bubble Options (Edit, Copy, Repost) */
+        .msg-bubble { position: relative; margin-bottom: 8px; padding: 8px 12px; border-radius: 15px; background: #e4e6eb; display: inline-block; max-width: 85%; }
+        .msg-bubble.user { background: #ff4b72; color: white; float: right; clear: both; }
+        .msg-bubble.partner { background: #e4e6eb; color: black; float: left; clear: both; }
+        .msg-options { display: none; position: absolute; bottom: -25px; right: 0; background: white; border: 1px solid #ccc; border-radius: 5px; z-index: 100; font-size: 11px; padding: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .msg-bubble:hover .msg-options { display: flex; gap: 8px; }
+        .msg-opt-btn { cursor: pointer; color: #333; font-weight: bold; padding: 2px 5px; }
+        .msg-opt-btn:hover { color: var(--primary-color); }
+
+        .chat-input-wrapper { display: flex; gap: 5px; clear: both; padding-top: 10px; }
+        .chat-input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
 
         .feature-btn {
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
@@ -77,6 +97,14 @@
             box-shadow: 0 4px 15px rgba(255, 75, 114, 0.3); margin-top: 15px; width: 100%;
         }
         .logout-btn { background: #666; box-shadow: none; margin-top: 30px; }
+        
+        /* 🚨 Help / Report Dialogue */
+        .report-panel { background: #fff; border: 1px solid #ffe0e6; border-radius: 15px; padding: 15px; margin-top: 15px; display: none; text-align: left; }
+        .report-option { padding: 8px; margin: 4px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 13px; background: #fafafa; }
+        .report-option:hover { background: #fff0f3; border-color: var(--primary-color); }
+
+        /* Camera Feed UI */
+        .cam-container { width: 150px; height: 150px; border-radius: 50%; border: 3px solid var(--primary-color); overflow: hidden; margin: 10px auto; background: #eee; }
 
         .bottom-nav {
             height: 70px; background: #ffffff; border-top: 1px solid #f0e2e4;
@@ -90,18 +118,19 @@
 
     <div class="app-container">
 
-        <!-- 🔐 အကောင့်ဝင်ခြင်းနှင့် လျှို့ဝှက်နံပါတ် စစ်ဆေးသည့် မျက်နှာစာ -->
+        <!-- 🔐 ၁/ ပထမစာမျက်နှာ - Login/PIN Auth Screen -->
         <div id="authScreen" class="auth-screen">
             <div class="safety-banner">
                 🛡️ စနစ်သတိပေးချက် နှင့် ကတိကဝတ်<br>
                 ဤအက်ပ်သည် သာမန်သုံးစွဲသူများအတွက်မဟုတ်ဘဲ အချစ်စစ်ရှာဖွေသူများအတွက်သာ ဖြစ်ပြီး၊ သုံးစွဲသူများ ဘေးကင်းလုံခြုံမှုရှိစေရန် အပြည့်အဝ လုံခြုံရေးအကာအကွယ် ပေးထားပါသည်။
             </div>
             
-            <h3 style="margin-bottom: 10px; color: #444;">လျှို့ဝှက်နံပါတ် ရိုက်ထည့်ပါ</h3>
-            <p style="color: #888; font-size: 12px; margin-top: 0;">(စမ်းသပ်ရန် လျှို့ဝှက်နံပါတ် <b>1234</b> ကို ရိုက်ထည့်ပါ)</p>
+            <h3 id="authTitle" style="margin-bottom: 15px; color: #444;">အကောင့်အချက်အလက် သတ်မှတ်ပါ</h3>
             
+            <input type="text" id="regUserName" class="auth-input" placeholder="သင့်အမည် (Profile Name) ရိုက်ထည့်ပါ">
             <input type="password" id="pinInputField" class="pin-input" maxlength="4" placeholder="••••">
-            <button class="feature-btn" onclick="window.loveAuth.verifyPIN()">အကောင့်သို့ဝင်ရန် 🚀</button>
+            
+            <button id="authSubmitBtn" class="feature-btn" onclick="window.loveAuth.handleAuth()">အကောင့်တည်ဆောက်ပြီး ဝင်ရောက်ရန် 🚀</button>
         </div>
 
         <!-- App Header -->
@@ -111,31 +140,65 @@
 
         <!-- Main Content -->
         <div class="app-content">
-            <!-- ၁။ Discover Page -->
+            <!-- 🌸 စာမျက်နှာ ၁ - Discover Page -->
             <div id="view-discover" class="view-panel active">
                 <div style="text-align: center; margin-top: 50px;">
                     <h2 style="color: var(--primary-color);">ရှာဖွေမှုစတင်ရန်</h2>
                     <p style="color:#666;">ရိုးသားပြီး စစ်မှန်သော ရေစက်များကို ဤနေရာတွင် ရှာဖွေပါ</p>
+                    <div style="margin-top:20px; font-weight:bold; color:#444;">မင်္ဂလာပါ - <span id="displayUserName" style="color:var(--primary-color);"></span> ✨</div>
                 </div>
             </div>
 
-            <!-- ၂။ Chat Page -->
+            <!-- 🔍 စာမျက်နှာ ၂ - Chats Page (မှန်ဘီလူး Search နှင့် စကားပြောခန်းတွဲလျက်) -->
             <div id="view-chat" class="view-panel">
+                <!-- 🔍 မှန်ဘီလူး ရှာဖွေရေးစနစ် -->
+                <div class="search-wrapper">
+                    <span>🔍</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="အမည်ဖြင့် ရှာဖွေရန်..." onkeyup="window.loveSearch.performSearch()">
+                </div>
+                
+                <!-- Search Result Names Dropdown List -->
+                <div id="searchSuggestions" style="margin-bottom:10px;"></div>
+
                 <div class="chat-box" id="chatDisplay">
                     <div style="color: #aaa; text-align: center; font-size: 13px; margin-top: 20px;">စကားပြောခန်း စတင်နိုင်ပါပြီ။</div>
                 </div>
-                <div style="display: flex; gap: 5px;">
+                
+                <div class="chat-input-wrapper">
+                    <!-- 📷 Live Camera Share (ဖုန်းထဲကပုံတင်ခွင့်မရှိ) -->
+                    <button class="feature-btn" style="margin:0; width:auto; background:#4caf50;" onclick="window.loveCamera.triggerLiveCapture()">📷</button>
                     <input type="text" id="chatInputField" class="chat-input" placeholder="စာတိုရိုက်ပါ...">
                     <button class="feature-btn" style="margin:0; width:auto;" onclick="window.loveAppChat.sendMessage()">Send</button>
                 </div>
+
+                <!-- 🚨 Help / Report Dialogue (အချက် ၅ ချက်) -->
+                <button class="feature-btn" style="background:#666; font-size:12px; padding:6px; border-radius:10px;" onclick="window.loveReport.togglePanel()">🚨 အကူအညီနှင့် တိုင်ကြားရန် (Help)</button>
+                <div id="reportPanel" class="report-panel">
+                    <div style="font-weight:bold; font-size:13px; margin-bottom:8px; color:var(--primary-color);">တိုင်ကြားလိုသည့် အကြောင်းအရင်း ရွေးချယ်ပါ-</div>
+                    <div class="report-option" onclick="window.loveReport.submitReport(1)">၁။ ငွေကြေး/ပိုက်ဆံ တောင်းခံခြင်း</div>
+                    <div class="report-option" onclick="window.loveReport.submitReport(2)">၂။ ခြิမ်းခြောက်ခြင်း/ရိုင်းစိုင်းခြင်း</div>
+                    <div class="report-option" onclick="window.loveReport.submitReport(3)">၃။ ပုံအတု/အကောင့်တုဟု သံသယရှိခြင်း</div>
+                    <div class="report-option" onclick="window.loveReport.submitReport(4)">၄။ Spam စာသားများ ဆက်တိုက်ပို့ခြင်း</div>
+                    <div class="report-option" onclick="window.loveReport.submitReport(5)">၅။ အခြား အထွေထွေ အဆင်မပြေမှုများ</div>
+                </div>
             </div>
 
-            <!-- ၃။ Profile Page -->
+            <!-- 👤 စာမျက်နှာ ၃ - Profile Page -->
             <div id="view-profile" class="view-panel" style="text-align: center;">
-                <h3 style="margin-top: 40px;">My Verified Profile</h3>
+                <h3 style="margin-top: 20px;">My Verified Profile</h3>
+                <p>အမည်: <span id="profileNameSpan" style="font-weight:bold;"></span></p>
                 <p style="color: #666;">Status: Active & Secured 🛡️</p>
-                
                 <button class="feature-btn logout-btn" onclick="window.loveAuth.logoutAccount()">🚪 အကောင့်မှထွက်ရန် (Logout)</button>
+            </div>
+
+            <!-- 🛡️ စာမျက်နှာ ၄ - အဆင့်မြင့် လုံခြုံရေးမှတ်တမ်း Panel (Security Logs Panel) -->
+            <div id="view-security" class="view-panel">
+                <h3 style="color:var(--primary-color); text-align:center;">🛡️ Security Alert & Violations Log</h3>
+                <p style="font-size:12px; color:#666; text-align:center;">စနစ်မှ ဖမ်းဆီးရမိထားသော ဥပဒေမဲ့ လှည့်ပတ်မှုမှတ်တမ်းများ</p>
+                <hr style="border:1px solid #ffe0e6;">
+                <div id="securityLogDisplay" style="font-size:12px; background:#fff; padding:10px; border-radius:10px; height:70%; overflow-y:auto; border:1px solid #ddd;">
+                    <div style="color:#aaa; text-align:center;">လက်ရှိတွင် ချိုးဖောက်မှု မှတ်တမ်းမရှိသေးပါ။</div>
+                </div>
             </div>
         </div>
 
@@ -144,36 +207,241 @@
             <button class="nav-item active" onclick="window.loveCore.switchView('discover', this)">Discover</button>
             <button class="nav-item" onclick="window.loveCore.switchView('chat', this)">Chats</button>
             <button class="nav-item" onclick="window.loveCore.switchView('profile', this)">Profile</button>
+            <button class="nav-item" onclick="window.loveCore.switchView('security', this)">Security</button>
         </div>
     </div>
 
+    <!-- 📷 Hidden Real Camera View Support for Live Upload -->
+    <div id="hiddenCamWrapper" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:3000; flex-direction:column; justify-content:center; align-items:center;">
+        <div class="cam-container" style="width:280px; height:280px;">
+            <video id="liveCamVid" autoplay playsinline style="width:100%; height:100%; object-fit:cover; transform:scaleX(-1);"></video>
+        </div>
+        <button class="feature-btn" style="width:200px; background:#ff4b72;" onclick="window.loveCamera.captureLivePhoto()">📸 ဓာတ်ပုံရိုက်ပြီး တိုက်ရိုက် Share မည်</button>
+    </div>
+
     <script>
-        // 🔐 Auth Module
+        // Fake Local User Database for Search Demo
+        const demoUsers = ["မောင်မောင်", "မြမြ", "မေသူ", "လှလှ", "အောင်အောင်", "ကျော်ကျော်"];
+        let editTargetIndex = null;
+
+        // 🔐 ၁/ ပထမစာမျက်နှာ - စိတ်ကြိုက် PIN နှင့် ဒေတာ ထိန်းသိမ်းရေး မော်ဂျူး
         window.loveAuth = {
-            correctPIN: "1234",
-            verifyPIN: function() {
-                const pin = document.getElementById('pinInputField').value;
-                if(pin === this.correctPIN) {
+            init: function() {
+                const savedPIN = localStorage.getItem("user_secret_pin");
+                const savedName = localStorage.getItem("user_profile_name");
+                
+                if (savedPIN && savedName) {
+                    // စက်ပိတ်/အပ်ပိတ်ပြီး ပြန်ဝင်လာပါက PIN သက်သက်သာ ပြန်တောင်းမည်
+                    document.getElementById('regUserName').style.display = 'none';
+                    document.getElementById('authTitle').innerText = `မင်္ဂလာပါ ${savedName}\nလျှို့ဝှက်နံပါတ် ပြန်လည်ရိုက်ထည့်ပါ`;
+                    document.getElementById('authSubmitBtn').innerText = "အကောင့်ပြန်ဖွင့်မည် 🔓";
+                }
+                this.updateUIProfiles(savedName);
+            },
+            handleAuth: function() {
+                const nameInput = document.getElementById('regUserName');
+                const pinInput = document.getElementById('pinInputField');
+                
+                const savedPIN = localStorage.getItem("user_secret_pin");
+                const savedName = localStorage.getItem("user_profile_name");
+
+                if (!savedPIN) {
+                    // ပထမဆုံးအကြိမ် Setup လုပ်ခြင်း
+                    if(nameInput.value.trim() === "" || pinInput.value.length < 4) {
+                        alert("❌ အမည်နှင့် ဂဏန်း ၄ လုံး ပြည့်စုံစွာ သတ်မှတ်ပေးပါဗျာ။");
+                        return;
+                    }
+                    localStorage.setItem("user_secret_pin", pinInput.value);
+                    localStorage.setItem("user_profile_name", nameInput.value);
+                    this.updateUIProfiles(nameInput.value);
                     document.getElementById('authScreen').style.display = 'none';
-                    alert("🔓 လျှို့ဝှက်နံပါတ် မှန်ကန်ပါသည်။ အက်ပ်ကို စိတ်ချစွာ သုံးစွဲနိုင်ပါပြီ။");
+                    alert("✨ အကောင့်တည်ဆောက်မှု အောင်မြင်ပြီး လျှို့ဝှက်နံပါတ်ကို မှတ်သားထားလိုက်ပါပြီ။");
                 } else {
-                    alert("❌ လျှို့ဝှက်နံပါတ် မှားယွင်းနေပါသည်။ ပြန်လည် ကြိုးစားပါ။");
-                    document.getElementById('pinInputField').value = "";
+                    // အပ်ပိတ်ပြီး ပြန်ဝင်လာသည့် အခြေအနေ တိုက်စစ်ခြင်း
+                    if (pinInput.value === savedPIN) {
+                        document.getElementById('authScreen').style.display = 'none';
+                        pinInput.value = "";
+                    } else {
+                        alert("❌ လျှို့ဝှက်နံပါတ် မှားယွင်းနေပါသည်။ လုံးဝ ဖွင့်ပေးမည်မဟုတ်ပါ။");
+                        pinInput.value = "";
+                    }
+                }
+            },
+            updateUIProfiles: function(name) {
+                if(name) {
+                    document.getElementById('displayUserName').innerText = name;
+                    document.getElementById('profileNameSpan').innerText = name;
                 }
             },
             logoutAccount: function() {
+                // Logout လုပ်သော်လည်း ဒေတာမပျောက်စေရ၊ PIN ပြန်တောင်းရန် Screen ပြန်ခေါ်ရုံသာ
                 document.getElementById('pinInputField').value = "";
+                document.getElementById('regUserName').style.display = 'none';
+                const savedName = localStorage.getItem("user_profile_name");
+                document.getElementById('authTitle').innerText = `မင်္ဂလာပါ ${savedName}\nလျှို့ဝှက်နံပါတ် ပြန်လည်ရိုက်ထည့်ပါ`;
+                document.getElementById('authSubmitBtn').innerText = "အကောင့်ပြန်ဖွင့်မည် 🔓";
                 document.getElementById('authScreen').style.display = 'flex';
                 window.loveCore.switchView('discover', document.querySelectorAll('.nav-item')[0]);
-                alert("🚪 အကောင့်ထဲမှ ဘေးကင်းစွာ ထွက်လိုက်ပါပြီ။");
             }
         };
 
-        // 🛡️ Core Engine (ချိုးဖောက်မှု မှတ်တမ်းတင်စနစ် အပါအဝင်)
+        // 🔍 ၂/ ဒုတိယစာမျက်နှာ - ရှာဖွေရန် မှန်ဘီလူး မော်ဂျူး
+        window.loveSearch = {
+            performSearch: function() {
+                const query = document.getElementById('searchInput').value.trim();
+                const sugDiv = document.getElementById('searchSuggestions');
+                sugDiv.innerHTML = "";
+                if(query === "") return;
+
+                // အက္ခရာစာလုံးတစ်လုံး ရိုက်လိုက်တာနဲ့ သက်ဆိုင်ရာ နာမည်များ အစဉ်လိုက်ပြသခြင်း
+                let filtered = demoUsers.filter(u => u.startsWith(query));
+                filtered.forEach(user => {
+                    const item = document.createElement('div');
+                    item.className = "chat-list-item";
+                    item.innerText = `👤 ${user}`;
+                    item.onclick = function() {
+                        document.getElementById('chatDisplay').innerHTML = `<div style='color:#ff4b72; font-weight:bold; text-align:center;'>${user} နှင့် စကားပြောခန်း ပွင့်သွားပါပြီ။</div>`;
+                        document.getElementById('searchInput').value = user;
+                        sugDiv.innerHTML = "";
+                    };
+                    sugDiv.appendChild(item);
+                });
+            }
+        };
+
+        // 📷 ၃/ ကင်မရာ တိုက်ရိုက် Share စနစ် (ဖုန်းထဲကပုံအတု တင်ခွင့်မရှိ)
+        window.loveCamera = {
+            streamTrack: null,
+            triggerLiveCapture: function() {
+                const wrapper = document.getElementById('hiddenCamWrapper');
+                const video = document.getElementById('liveCamVid');
+                wrapper.style.display = 'flex';
+                
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
+                .then(stream => {
+                    window.loveCamera.streamTrack = stream;
+                    video.srcObject = stream;
+                }).catch(() => {
+                    alert("❌ Live Camera ဖွင့်၍မရပါဗျာ။");
+                    wrapper.style.display = 'none';
+                });
+            },
+            captureLivePhoto: function() {
+                const display = document.getElementById('chatDisplay');
+                if(this.streamTrack) {
+                    this.streamTrack.getTracks().forEach(track => track.stop());
+                }
+                document.getElementById('hiddenCamWrapper').style.display = 'none';
+                
+                // Chat ထဲသို့ တိုက်ရိုက် Live ဓာတ်ပုံရိုက်ပြီး Share လိုက်သည့် ပုံစံပြသခြင်း
+                const imgHtml = `<div class="msg-bubble user" style="clear:both; background:#fff; border:2px solid #ff4b72;"><span style="color:#ff4b72;font-size:12px;">📷 Live Verified Snapshot Shared</span></div>`;
+                if(display.innerHTML.includes("စကားပြောခန်း")) display.innerHTML = "";
+                display.insertAdjacentHTML('beforeend', imgHtml);
+                display.scrollTop = display.scrollHeight;
+            }
+        };
+
+        // // 💬 စကားပြောခန်း စာသား ပြင်ဆင်၊ ကူးယူ၊ Repost စနစ်
+        window.loveAppChat = {
+            sendMessage: function() {
+                const input = document.getElementById('chatInputField');
+                const display = document.getElementById('chatDisplay');
+                let text = input.value.trim();
+                if (text === "") return;
+
+                if (editTargetIndex !== null) {
+                    // စာပြင်ဆင်ခြင်း (Edit) စနစ်အလုပ်လုပ်ပုံ
+                    const bubbles = display.querySelectorAll('.msg-bubble.user');
+                    if(bubbles[editTargetIndex]) {
+                        bubbles[editTargetIndex].childNodes[0].nodeValue = text + " (Edited) ";
+                    }
+                    editTargetIndex = null;
+                    input.value = "";
+                    return;
+                }
+
+                // Security Engine Filtering
+                let isViolation = false;
+                let reason = "";
+                const spamRegex = /(.)\1{4,}/g; 
+                if (spamRegex.test(text) || text.length > 80 && !text.includes(" ")) {
+                    isViolation = true;
+                    reason = "စာလုံးများ အလွန်အကျွံ ရိုက်နှက်မှု (Character Spamming)";
+                }
+
+                const advancedBlacklist = ["ငွေလွှဲ", "ငွေလွဲ", "ပိုက်ဆံ", "ပိုက်ချေး", "မန်းနီး", "money", "အကောက်", "အကောင့်", "၃၀၀", "သုံးသိန်း", "လိမ်"];
+                let matchedWord = advancedBlacklist.find(word => text.toLowerCase().includes(word));
+                if (matchedWord && !isViolation) {
+                    if (text.includes("လွဲ") || text.includes("လွှဲ") || text.includes("ပေး") || text.includes("ထည့်") || text.includes("ချေး")) {
+                        isViolation = true;
+                        reason = `လှည့်ပတ်စကားလုံး သုံးစွဲမှု (${matchedWord})`;
+                    }
+                }
+
+                if (isViolation) {
+                    alert(`⚠️ စနစ်သတိပေးချက်:\n[အကြောင်းပြချက်: ${reason}] ကြောင့် စာပို့ခွင့်မပြုပါ။`);
+                    window.loveAppCore.logViolation(text, reason);
+                    input.value = "";
+                    return;
+                }
+
+                // Bubble Index Tracking for Menu Options
+                const currentIndex = display.querySelectorAll('.msg-bubble.user').length;
+
+                const msgHtml = `
+                    <div class="msg-bubble user">
+                        ${text}
+                        <div class="msg-options">
+                            <span class="msg-opt-btn" onclick="window.loveAppChat.editMsg(${currentIndex}, '${text}')">✏️ ပြင်</span>
+                            <span class="msg-opt-btn" onclick="navigator.clipboard.writeText('${text}');alert('Copied!');">📋 ကူး</span>
+                            <span class="msg-opt-btn" onclick="window.loveAppChat.repostMsg('${text}')">🔁 Repost</span>
+                        </div>
+                    </div>`;
+                
+                if(display.innerHTML.includes("စကားပြောခန်း")) display.innerHTML = "";
+                display.insertAdjacentHTML('beforeend', msgHtml);
+                display.scrollTop = display.scrollHeight;
+                input.value = "";
+            },
+            editMsg: function(index, oldText) {
+                editTargetIndex = index;
+                document.getElementById('chatInputField').value = oldText;
+                document.getElementById('chatInputField').focus();
+            },
+            repostMsg: function(text) {
+                document.getElementById('chatInputField').value = text;
+                this.sendMessage();
+            }
+        };
+
+        // 🚨 ၄/ စာမျက်နှာ ၄ နေရာတွင် အစားထိုးထားသော လုံခြုံရေးမှတ်တမ်း Panel & Help System
         window.loveAppCore = {
             logViolation: function(badText, violationReason) {
-                // ဆရာကြီး နောက်ပိုင်း Firebase တိုက်ရိုက်ချိတ်ဆက်ရင် သုံးနိုင်အောင် Console Log ထားပေးပါတယ်ဗျာ
-                console.warn(`[SECURITY VIOLATION] Reason: ${violationReason} | Content: "${badText}"`);
+                const logDisplay = document.getElementById('securityLogDisplay');
+                if(logDisplay.innerHTML.includes("မှတ်တမ်းမရှိသေးပါ")) logDisplay.innerHTML = "";
+                
+                const logItem = `<div style="border-left:3px solid #ff4b72; padding-left:8px; margin-bottom:10px;">
+                    <span style="color:#ff4b72; font-weight:bold;">🚨 [ALERT]</span><br>
+                    <b>အကြောင်းရင်း:</b> ${violationReason}<br>
+                    <b>စာသား:</b> "${badText}"<br>
+                    <small style="color:#999;">${new Date().toLocaleTimeString()}</small>
+                </div>`;
+                logDisplay.insertAdjacentHTML('afterbegin', logItem);
+            }
+        };
+
+        window.loveReport = {
+            togglePanel: function() {
+                const panel = document.getElementById('reportPanel');
+                panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+            },
+            submitReport: function(typeCode) {
+                document.getElementById('reportPanel').style.display = 'none';
+                if(typeCode === 1 || typeCode === 2) {
+                    alert("🚨 ပြင်းထန်သော ဥပဒေမဲ့/ငွေလိမ်မှု ချိုးဖောက်မှု တိုင်ကြားချက် ဖြစ်သောကြောင့် စနစ်မှ ၎င်းအကောင့်ကို ချက်ချင်း အပြီးပိုင် ပိတ်သိမ်း (Block) လိုက်ပါပြီ။");
+                } else {
+                    alert("📝 စနစ်မှ တိုင်ကြားချက်ကို မှတ်တမ်းတင်လိုက်ပါပြီ။ စစ်ဆေးမှုများ ဆက်လက်လုပ်ဆောင်ပါမည်။");
+                }
             }
         };
 
@@ -186,56 +454,9 @@
             }
         };
 
-        // 💬 ဆရာကြီး ပေးပို့ထားသော အဆင့်မြင့် လုံခြုံရေး စစ်ထုတ်မှု Engine စစ်စစ်
-        window.loveAppChat = {
-            sendMessage: function() {
-                const input = document.getElementById('chatInputField');
-                const display = document.getElementById('chatDisplay');
-                const text = input.value.trim();
-                
-                if (text === "") return;
-
-                let isViolation = false;
-                let reason = "";
-
-                // 🛑 ၁။ Spam Text Detection
-                const spamRegex = /(.)\1{4,}/g; 
-                if (spamRegex.test(text) || text.length > 80 && !text.includes(" ")) {
-                    isViolation = true;
-                    reason = "စနစ်ကို မျက်စိလည်စေရန် စာလုံးများ အလွန်အကျွံ ရိုက်နှက်မှု (Character Spamming)";
-                }
-
-                // 🛑 ၂။ သွေဖည်/လှည့်ပတ်သော စကားလုံးများ
-                const advancedBlacklist = [
-                    "ငွေလွှဲ", "ငွေလွဲ", "ပိုက်ဆံ", "ပိုက်ချေး", "မန်းနီး", "money", 
-                    "အကောက်", "အကောင့်", "၃၀၀", "သုံးသိန်း", "လိမ်", "scam"
-                ];
-                
-                let matchedWord = advancedBlacklist.find(word => text.toLowerCase().includes(word));
-                
-                if (matchedWord && !isViolation) {
-                    if (text.includes("လွဲ") || text.includes("လွှဲ") || text.includes("ပေး") || text.includes("ထည့်") || text.includes("ချေး")) {
-                        isViolation = true;
-                        reason = `လှည့်ပတ်စကားလုံး သုံးစွဲမှု (ဖမ်းမိသောစကားလုံး: ${matchedWord})`;
-                    }
-                }
-
-                // 🚨 ချိုးဖောက်မှု တွေ့ရှိပါက တားမြစ်မည်
-                if (isViolation) {
-                    alert(`⚠️ စနစ်လုံခြုံရေး သတိပေးချက်:\nလှည့်ပတ် စာသားများ သို့မဟုတ် ပုံမှန်မဟုတ်သော ရိုက်နှက်မှုများကြောင့် ဤစာကို ပို့ခွင့်မပြုပါ။\n[အကြောင်းပြချက်: ${reason}]`);
-                    window.loveAppCore.logViolation(text, reason);
-                    input.value = "";
-                    return;
-                }
-
-                // စည်းကမ်းချက်နှင့် ညီညွတ်လျှင် ပို့ခွင့်ပြုမည်
-                const msgHtml = `<div style="margin-bottom: 8px;"><b>You:</b> ${text}</div>`;
-                if(display.innerHTML.includes("စကားပြောခန်း စတင်နိုင်ပါပြီ။")) display.innerHTML = "";
-                display.insertAdjacentHTML('beforeend', msgHtml);
-                display.scrollTop = display.scrollHeight;
-                input.value = "";
-            }
-        };
+        // Run Check On Startup
+        window.loveAuth.init();
     </script>
 </body>
 </html>
+              
