@@ -10,7 +10,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-    <!-- 🎨 Love-App Premium UI CSS -->
     <style>
         :root {
             --primary-color: #ff4b72;
@@ -49,19 +48,17 @@
             z-index: 10;
         }
 
-        /* Top Header */
         .app-header {
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             color: white;
             padding: 20px;
             text-align: center;
             font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            cursor: pointer; /* Owner Secret Click အတွက် */
         }
-        .app-header h1 { margin: 0; font-size: 22px; letter-spacing: 1px; }
+        .app-header h1 { margin: 0; font-size: 22px; letter-spacing: 1px; user-select: none; }
         .engine-status { font-size: 11px; opacity: 0.9; margin-top: 4px; }
 
-        /* Main Content Viewport */
         .app-content {
             flex: 1;
             padding: 20px;
@@ -69,13 +66,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
 
-        .view-panel { display: none; width: 100%; text-align: center; }
+        .view-panel { display: none; width: 100%; text-align: center; height: 100%; }
         .view-panel.active { display: block; }
 
-        /* Feature Card Components */
         .feature-btn {
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             color: white;
@@ -86,87 +81,91 @@
             border-radius: 25px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255, 75, 114, 0.3);
-            transition: transform 0.2s;
             margin-top: 15px;
         }
-        .feature-btn:active { transform: scale(0.95); }
 
-        /* Bottom Navigation Bar */
+        /* 💬 Chat Form Styles */
+        .chat-box { width: 100%; border: 1px solid #f0e2e4; border-radius: 15px; height: 200px; padding: 10px; margin-bottom: 10px; background: #fafafa; text-align: left; overflow-y: auto; }
+        .chat-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
+
+        /* 🤫 Secret Admin Overlay */
+        .admin-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #1e1e24; color: #fff;
+            z-index: 1000; padding: 20px;
+            overflow-y: auto;
+        }
+        .admin-close { background: #ff4b72; color: white; border: none; padding: 5px 10px; border-radius: 5px; float: right; cursor: pointer; }
+        .log-item { background: #2d2d35; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 12px; border-left: 4px solid #ff4b72; text-align: left; }
+
         .bottom-nav {
-            height: 70px;
-            background: #ffffff;
-            border-top: 1px solid #f0e2e4;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
+            height: 70px; background: #ffffff; border-top: 1px solid #f0e2e4;
+            display: flex; justify-content: space-around; align-items: center;
         }
-        .nav-item {
-            background: none;
-            border: none;
-            color: #8c7b7d;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
+        .nav-item { background: none; border: none; color: #8c7b7d; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .nav-item.active { color: var(--primary-color); }
         .nav-icon { font-size: 20px; }
 
-        /* 🎆 Heart Burst Canvas (ဖန်သားပြင်တစ်ခုလုံး နှလုံးသားကြဲမည့် နေရာ) */
-        #heartCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 999;
-            display: none;
-        }
+        #heartCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; display: none; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <!-- Heart Burst Canvas Layer -->
+        <!-- Heart Canvas Layer -->
         <canvas id="heartCanvas"></canvas>
 
-        <!-- App Header -->
-        <div class="app-header">
-            <h1>❤️ LOVE-APP</h1>
+        <!-- 🤫 Secret Admin Command Center View -->
+        <div id="secretAdminPanel" class="admin-overlay">
+            <button class="admin-close" onclick="document.getElementById('secretAdminPanel').style.display='none'">Close X</button>
+            <h3>🤫 Secret Owner Command Center</h3>
+            <p style="color: #aaa; font-size: 12px;">မရိုးသားသော အပြုအမူများနှင့် စနစ်မှတ်တမ်းများကို ဤနေရာတွင် လျှို့ဝှက်စောင့်ကြည့်နိုင်ပါသည်။</p>
+            <hr style="border-color: #333;">
+            <div id="adminLogsContainer">
+                <p style="color: #666; font-size: 13px; text-align: center;">ယခုလောလောဆယ် စည်းကမ်းချိုးဖောက်မှု မှတ်တမ်းမရှိသေးပါ။</p>
+            </div>
+        </div>
+
+        <!-- App Header (❤️ LOVE-APP ကို ၅ ကြိမ်နှိပ်လျှင် Admin ပွင့်မည်) -->
+        <div class="app-header" onclick="window.loveAppCore.triggerSecretAdmin()">
+            <h1 id="appHeaderTitle">❤️ LOVE-APP</h1>
             <div class="engine-status" id="appStatus">Cloud Connecting... ⏳</div>
         </div>
 
-        <!-- Main Content (မျက်နှာပြင်များ) -->
+        <!-- Main Content -->
         <div class="app-content">
             
-            <!-- ၁။ Discover/Match Page -->
+            <!-- ၁။ Discover Page -->
             <div id="view-discover" class="view-panel active">
-                <h3>Find Your Match</h3>
+                <h3 style="margin-top: 40px;">Find Your Match</h3>
                 <p style="color: #666;">စိတ်ဝင်စားမှုတူသူများကို ရှာဖွေပါ။</p>
                 <button class="feature-btn" onclick="window.loveAppMatch.triggerFind()">Start Matching 🚀</button>
             </div>
 
-            <!-- ၂။ Chat Page -->
+            <!-- ၂။ Chat Page (စမ်းသပ်ရန် နေရာ) -->
             <div id="view-chat" class="view-panel">
                 <h3>Intimate Chat Room</h3>
-                <p style="color: #666;">လုံခြုံစိတ်ချရသော သီးသန့်စကားပြောခန်း</p>
-                <button class="feature-btn">Open Messages 💬</button>
+                <div class="chat-box" id="chatDisplay">
+                    <div style="color: #888; font-size: 13px;">💬 စနစ်လုံခြုံရေး စမ်းသပ်ရန် စာရိုက်၍ ပို့ကြည့်ပါ။<br>(ဥပမာ - "ငွေလွှဲပေးပါ" သို့မဟုတ် "scam" ဟု ရိုက်ပို့ပါ)</div>
+                </div>
+                <div style="display: flex; gap: 5px; width: 100%;">
+                    <input type="text" id="chatInputField" class="chat-input" placeholder="စာတိုရိုက်ပါ...">
+                    <button class="feature-btn" style="margin: 0; border-radius: 20px;" onclick="window.loveAppChat.sendMessage()">Send</button>
+                </div>
             </div>
 
-            <!-- ၃။ Profile/Verification Page -->
+            <!-- ၃။ Profile Page -->
             <div id="view-profile" class="view-panel">
-                <h3>Verified Profile</h3>
+                <h3 style="margin-top: 40px;">Verified Profile</h3>
                 <p style="color: #666;">အကောင့်စစ်မှန်ကြောင်း အတည်ပြုရန်</p>
                 <button class="feature-btn">Selfie Verify 📸</button>
             </div>
 
         </div>
 
-        <!-- Bottom Navigation Menu -->
+        <!-- Bottom Navigation -->
         <div class="bottom-nav">
             <button class="nav-item active" onclick="window.loveAppCore.switchView('discover', this)">
                 <span class="nav-icon">✨</span><span>Discover</span>
@@ -182,7 +181,6 @@
 
     <!-- ⚙️ JavaScript Engine -->
     <script>
-        // Core Architecture & State Management
         window.loveAppCore = {
             config: {
                 apiKey: "AIzaSyAs-YOUR-ACTUAL-API-KEY", // သင်၏ မူရင်း API Key ကို ဤနေရာတွင် ထည့်ပါ
@@ -192,6 +190,7 @@
                 messagingSenderId: "987654321098",
                 appId: "1:987654321098:web:abcdef123456"
             },
+            adminClickCount: 0,
             init: function() {
                 const statusElement = document.getElementById('appStatus');
                 try {
@@ -200,10 +199,9 @@
                     }
                     this.db = firebase.firestore();
                     this.auth = firebase.auth();
-                    statusElement.innerText = "⚡ Project Gold Engine Ready";
+                    statusElement.innerText = "⚡ Safety Core Engine Ready";
                 } catch (error) {
                     statusElement.innerText = "❌ Connection Error";
-                    console.error(error);
                 }
             },
             switchView: function(viewId, targetBtn) {
@@ -211,88 +209,118 @@
                 document.getElementById('view-' + viewId).classList.add('active');
                 document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
                 targetBtn.classList.add('active');
+            },
+            // 🤫 Header ကို ၅ ကြိမ်နှိပ်လျှင် လျှို့ဝှက် ပိုင်ရှင် Panel ဖွင့်မည့်စနစ်
+            triggerSecretAdmin: function() {
+                this.adminClickCount++;
+                if (this.adminClickCount === 5) {
+                    this.adminClickCount = 0;
+                    document.getElementById('secretAdminPanel').style.display = 'block';
+                }
+            },
+            // 🕵️ မရိုးသားသော စာသားများကို လျှို့ဝှက် ဖမ်းယူ မှတ်တမ်းတင်မည့် နေရာ
+            logViolation: function(badText) {
+                const container = document.getElementById('adminLogsContainer');
+                if(container.innerHTML.includes("မှတ်တမ်းမရှိသေးပါ")) container.innerHTML = "";
+                
+                const time = new Date().toLocaleTimeString();
+                const logHtml = `<div class="log-item">
+                    <b>⚠️ မသင်္ကာဖွယ်ရာ တွေ့ရှိမှု (${time})</b><br>
+                    User: Anonymous User<br>
+                    Text: "${badText}"<br>
+                    Status: <span style="color:#ffc107;">Soft Blocked & Warned</span>
+                </div>`;
+                container.insertAdjacentHTML('afterbegin', logHtml);
+                
+                // Firebase ထဲသို့လည်း အသံတိတ် လှမ်းသိမ်းမည်
+                if(this.db) {
+                    this.db.collection("security_audit_logs").add({
+                        text: badText,
+                        action: "Soft Blocked",
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    }).catch(e => console.log("Silent Sync"));
+                }
             }
         };
 
-        // Smart Matching Engine Module
         window.loveAppMatch = {
-            triggerFind: function() {
-                // အောင်မြင်စွာ Match ဖြစ်သွားပြီဟု ယူဆကာ Visual Effect ကို လှမ်းခေါ်မည်
-                window.loveAppFx.triggerHeartBurst();
+            triggerFind: function() { window.loveAppFx.triggerHeartBurst(); }
+        };
+
+        // 💬 Chats Module (သင့်အိုင်ဒီယာဖြစ်သော စစ်ထုတ်/သတိပေးစနစ်)
+        window.loveAppChat = {
+            sendMessage: function() {
+                const input = document.getElementById('chatInputField');
+                const display = document.getElementById('chatDisplay');
+                const text = input.value.trim();
+                
+                if (text === "") return;
+
+                // 🚨 မရိုးသားသော စကားလုံး ပေါင်းစပ်မှုများကို စစ်ဆေးခြင်း
+                const dangerousKeywords = ["ငွေလွှဲ", "ကတ်နံပါတ်", "scam", "လိမ်လည်", "ငွေပို့"];
+                let isViolation = dangerousKeywords.some(word => text.toLowerCase().includes(word));
+
+                if (isViolation) {
+                    // သင့်အိုင်ဒီယာအတိုင်း စာကို ပို့ခွင့်မပြုဘဲ ပထမအဆင့် သတိပေးချက် ပြခြင်း
+                    alert("⚠️ စနစ်သတိပေးချက်:\nသင်ပေးပို့သောစာတွင် အက်ပ်၏ လုံခြုံရေးစည်းကမ်းချက်များကို ချိုးဖောက်နိုင်သည့် စကားလုံးများ ပါဝင်နေသဖြင့် ဤစာကို ပို့ခွင့်မရှိပါ။ ကျေးဇူးပြု၍ စနစ်တကျ ပြန်လည်ရေးသားပါ။");
+                    
+                    // နောက်ကွယ်မှ ပိုင်ရှင်ထံ လျှို့ဝှက် မှတ်တမ်းလှမ်းပို့ခြင်း
+                    window.loveAppCore.logViolation(text);
+                    input.value = "";
+                    return;
+                }
+
+                // စည်းကမ်းနှင့် ညီညွတ်ပါက ပုံမှန်အတိုင်း စာပို့ခွင့်ပြုမည်
+                const msgHtml = `<div style="margin-bottom: 8px;"><b>You:</b> ${text}</div>`;
+                if(display.innerHTML.includes("စမ်းသပ်ရန် နေရာ")) display.innerHTML = "";
+                display.insertAdjacentHTML('beforeend', msgHtml);
+                display.scrollTop = display.scrollHeight;
+                input.value = "";
             }
         };
 
-        // 🎆 Visual Effects Module (Heart Burst Engine)
+        // 🎆 Heart Burst Fx Engine
         window.loveAppFx = {
             triggerHeartBurst: function() {
                 const canvas = document.getElementById('heartCanvas');
                 const ctx = canvas.getContext('2d');
                 canvas.style.display = 'block';
-                
-                // Canvas အရွယ်အစားကို App Container အတိုင်း ညှိခြင်း
                 canvas.width = canvas.parentElement.clientWidth;
                 canvas.height = canvas.parentElement.clientHeight;
-
                 const hearts = [];
                 const colors = ['#ff4b72', '#ff7693', '#ff003c', '#ff8da1', '#ffb3c1'];
-
-                // နှလုံးသားအမှုန်အမွှား ၆၀ ဖန်တီးခြင်း
                 for (let i = 0; i < 60; i++) {
                     hearts.push({
-                        x: canvas.width / 2,
-                        y: canvas.height / 2,
+                        x: canvas.width / 2, y: canvas.height / 2,
                         size: Math.random() * 8 + 6,
                         color: colors[Math.floor(Math.random() * colors.length)],
                         speedX: (Math.random() - 0.5) * 8,
-                        speedY: (Math.random() - 0.5) * 8 - 3, // အပေါ်သို့ ပင့်တက်စေရန်
+                        speedY: (Math.random() - 0.5) * 8 - 3,
                         opacity: 1
                     });
                 }
-
-                let animationFrame;
                 function animate() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     let alive = false;
-
                     hearts.forEach(h => {
                         if (h.opacity > 0) {
                             alive = true;
-                            h.x += h.speedX;
-                            h.y += h.speedY;
-                            h.opacity -= 0.015; // တဖြည်းဖြည်း မှေးမှိန်ပျောက်ကွယ်စေရန်
-                            
-                            // Canvas ပေါ်တွင် နှလုံးသားပုံစံ Vector ဆွဲခြင်း
-                            ctx.save();
-                            ctx.globalAlpha = h.opacity;
-                            ctx.beginPath();
-                            ctx.fillStyle = h.color;
-                            
-                            // Heart Vector Equations
-                            ctx.translate(h.x, h.y);
-                            ctx.moveTo(0, 0);
+                            h.x += h.speedX; h.y += h.speedY; h.opacity -= 0.015;
+                            ctx.save(); ctx.globalAlpha = h.opacity; ctx.beginPath(); ctx.fillStyle = h.color;
+                            ctx.translate(h.x, h.y); ctx.moveTo(0, 0);
                             ctx.bezierCurveTo(-h.size / 2, -h.size / 2, -h.size, h.size / 3, 0, h.size);
                             ctx.bezierCurveTo(h.size, h.size / 3, h.size / 2, -h.size / 2, 0, 0);
-                            
-                            ctx.fill();
-                            ctx.restore();
+                            ctx.fill(); ctx.restore();
                         }
                     });
-
-                    if (alive) {
-                        animationFrame = requestAnimationFrame(animate);
-                    } else {
-                        cancelAnimationFrame(animationFrame);
-                        canvas.style.display = 'none';
-                    }
+                    if (alive) requestAnimationFrame(animate); else canvas.style.display = 'none';
                 }
-
                 animate();
             }
         };
 
-        // စနစ်အားလုံးကို စတင်မောင်းနှင်ခြင်း
         window.loveAppCore.init();
     </script>
-
 </body>
-</html>
+                    </html>
+                    
