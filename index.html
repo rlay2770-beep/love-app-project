@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love-App Next-Gen (GitHub Cloud Setup)</title>
+    
+    <!-- ⚡ Firebase Standard SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #ff4b72;
+            --background-color: #fffafb;
+            --text-color: #2d2123;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .app-container {
+            width: 90%;
+            max-width: 400px;
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        h1 {
+            color: var(--primary-color);
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+        .status-badge {
+            background-color: #ffeef1;
+            color: var(--primary-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <h1>❤️ LOVE-APP</h1>
+        <p style="color: #666; margin: 0;">Project Gold Engine</p>
+        
+        <div class="status-badge" id="appStatus">Connecting Cloud... ⏳</div>
+    </div>
+
+    <script>
+        // ကုတ်ဟောင်းများနှင့် လုံးဝမငြိစေရန် သီးသန့် ကာကွယ်ထားသော စနစ်သစ်
+        window.loveAppCore = {
+            config: {
+                apiKey: "AIzaSyAs-YOUR-ACTUAL-API-KEY", // သင်၏ မူရင်း API Key ကို ဤနေရာတွင် ထည့်ပါ
+                authDomain: "happy5-rlay.firebaseapp.com",
+                projectId: "happy5-rlay",
+                storageBucket: "happy5-rlay.appspot.com",
+                messagingSenderId: "987654321098",
+                appId: "1:987654321098:web:abcdef123456"
+            },
+            init: function() {
+                const statusElement = document.getElementById('appStatus');
+                
+                try {
+                    if (!firebase.apps.length) {
+                        firebase.initializeApp(this.config);
+                    }
+                    this.db = firebase.firestore();
+                    this.auth = firebase.auth();
+                    
+                    statusElement.innerText = "💖 Love-App Cloud Engine Ready!";
+                    console.log("💖 Engine successfully initialized on GitHub Cloud.");
+                } catch (error) {
+                    statusElement.innerText = "❌ Firebase Connection Error";
+                    console.error(error);
+                }
+            }
+        };
+
+        // အခြား Module များကို စနစ်တကျ သီးသန့်နေရာချထားခြင်း
+        window.loveAppMatch = {};
+        window.loveAppFx    = {};
+        window.loveAppChat  = {};
+
+        // စတင် Run ပါမည်
+        window.loveAppCore.init();
+    </script>
+
+</body>
+  </html>
+  
