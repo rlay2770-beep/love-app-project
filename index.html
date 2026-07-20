@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love-App Next-Gen (Premium Dashboard)</title>
+    <title>True Love - Next Gen</title>
     
     <!-- ⚡ Firebase Standard SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -54,9 +54,9 @@
             padding: 20px;
             text-align: center;
             font-weight: bold;
-            cursor: pointer; /* Owner Secret Click အတွက် */
+            cursor: pointer;
         }
-        .app-header h1 { margin: 0; font-size: 22px; letter-spacing: 1px; user-select: none; }
+        .app-header h1 { margin: 0; font-size: 20px; letter-spacing: 1px; user-select: none; }
         .engine-status { font-size: 11px; opacity: 0.9; margin-top: 4px; }
 
         .app-content {
@@ -85,7 +85,7 @@
         }
 
         /* 💬 Chat Form Styles */
-        .chat-box { width: 100%; border: 1px solid #f0e2e4; border-radius: 15px; height: 200px; padding: 10px; margin-bottom: 10px; background: #fafafa; text-align: left; overflow-y: auto; }
+        .chat-box { width: 100%; border: 1px solid #f0e2e4; border-radius: 15px; height: 280px; padding: 10px; margin-bottom: 10px; background: #fafafa; text-align: left; overflow-y: auto; }
         .chat-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
 
         /* 🤫 Secret Admin Overlay */
@@ -98,7 +98,7 @@
             overflow-y: auto;
         }
         .admin-close { background: #ff4b72; color: white; border: none; padding: 5px 10px; border-radius: 5px; float: right; cursor: pointer; }
-        .log-item { background: #2d2d35; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 12px; border-left: 4px solid #ff4b72; text-align: left; }
+        .log-item { background: #2d2d35; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 12px; border-left: 4px solid #ff4b72; text-align: left; line-height: 1.4; }
 
         .bottom-nav {
             height: 70px; background: #ffffff; border-top: 1px solid #f0e2e4;
@@ -108,29 +108,35 @@
         .nav-item.active { color: var(--primary-color); }
         .nav-icon { font-size: 20px; }
 
+        /* Love Badge */
+        .love-badge {
+            background: #fff0f3; color: var(--primary-color); padding: 8px 15px;
+            border-radius: 20px; font-size: 13px; font-weight: bold; margin-bottom: 15px;
+            border: 1px solid #ffe0e6; display: inline-block;
+        }
+
         #heartCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; display: none; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <!-- Heart Canvas Layer -->
         <canvas id="heartCanvas"></canvas>
 
         <!-- 🤫 Secret Admin Command Center View -->
         <div id="secretAdminPanel" class="admin-overlay">
             <button class="admin-close" onclick="document.getElementById('secretAdminPanel').style.display='none'">Close X</button>
             <h3>🤫 Secret Owner Command Center</h3>
-            <p style="color: #aaa; font-size: 12px;">မရိုးသားသော အပြုအမူများနှင့် စနစ်မှတ်တမ်းများကို ဤနေရာတွင် လျှို့ဝှက်စောင့်ကြည့်နိုင်ပါသည်။</p>
+            <p style="color: #aaa; font-size: 12px;">မရိုးသားသော ဥပဒေချိုးဖောက်မှုနှင့် ခြိမ်းခြောက်မှု မှတ်တမ်းများ</p>
             <hr style="border-color: #333;">
             <div id="adminLogsContainer">
                 <p style="color: #666; font-size: 13px; text-align: center;">ယခုလောလောဆယ် စည်းကမ်းချိုးဖောက်မှု မှတ်တမ်းမရှိသေးပါ။</p>
             </div>
         </div>
 
-        <!-- App Header (❤️ LOVE-APP ကို ၅ ကြိမ်နှိပ်လျှင် Admin ပွင့်မည်) -->
+        <!-- App Header -->
         <div class="app-header" onclick="window.loveAppCore.triggerSecretAdmin()">
-            <h1 id="appHeaderTitle">❤️ LOVE-APP</h1>
+            <h1>❤️ TRUE LOVE (အချစ်စစ်ရှာဖွေရာ)</h1>
             <div class="engine-status" id="appStatus">Cloud Connecting... ⏳</div>
         </div>
 
@@ -139,16 +145,23 @@
             
             <!-- ၁။ Discover Page -->
             <div id="view-discover" class="view-panel active">
-                <h3 style="margin-top: 40px;">Find Your Match</h3>
-                <p style="color: #666;">စိတ်ဝင်စားမှုတူသူများကို ရှာဖွေပါ။</p>
+                <div style="margin-top: 30px;">
+                    <span class="love-badge">✨ စိတ်ချလုံခြုံစွာ အချစ်စစ်ကို ရှာဖွေပါ</span>
+                </div>
+                <p style="color: #666; font-size: 14px; padding: 0 20px; line-height: 1.6;">
+                    ဤနေရာသည် ရိုးသားစွာ အချစ်စစ်နှင့် ရေစက်ရှာဖွေရန် သီးသန့်ဖြစ်ပြီး၊ ငွေကြေးလိမ်လည်ခြင်းနှင့် နှောင့်ယှက်ခြင်းများကို စနစ်မှ ရာနှုန်းပြည့် တားမြစ်ထားပါသည်။
+                </p>
                 <button class="feature-btn" onclick="window.loveAppMatch.triggerFind()">Start Matching 🚀</button>
             </div>
 
-            <!-- ၂။ Chat Page (စမ်းသပ်ရန် နေရာ) -->
+            <!-- ၂။ Chat Page -->
             <div id="view-chat" class="view-panel">
-                <h3>Intimate Chat Room</h3>
+                <h4 style="margin: 10px 0; color: #555;">💬 စနစ်လုံခြုံရေးအင်ဂျင် (မြန်မာစာ ဉာဏ်ရည်မြှင့်စစ်ထုတ်စနစ်)</h4>
                 <div class="chat-box" id="chatDisplay">
-                    <div style="color: #888; font-size: 13px;">💬 စနစ်လုံခြုံရေး စမ်းသပ်ရန် စာရိုက်၍ ပို့ကြည့်ပါ။<br>(ဥပမာ - "ငွေလွှဲပေးပါ" သို့မဟုတ် "scam" ဟု ရိုက်ပို့ပါ)</div>
+                    <div style="color: #888; font-size: 13px; line-height: 1.5;">
+                        ဆရာစမ်းသပ်ခဲ့သော စာသားများကို ပြန်လည်ရိုက်ပို့ပြီး စမ်းသပ်ကြည့်ပါ။<br>
+                        (ဥပမာ - "အကောက်ထဲ ၃၀၀၀၀၀ လောက်ထည့်ပေး" သို့မဟုတ် "အွန်လိုင်းပေါ်တင်မယ်" ဟု ရိုက်ပို့ပါ)
+                    </div>
                 </div>
                 <div style="display: flex; gap: 5px; width: 100%;">
                     <input type="text" id="chatInputField" class="chat-input" placeholder="စာတိုရိုက်ပါ...">
@@ -159,7 +172,7 @@
             <!-- ၃။ Profile Page -->
             <div id="view-profile" class="view-panel">
                 <h3 style="margin-top: 40px;">Verified Profile</h3>
-                <p style="color: #666;">အကောင့်စစ်မှန်ကြောင်း အတည်ပြုရန်</p>
+                <p style="color: #666;">ပျော်ရွှင်စရာကောင်းပြီး စစ်မှန်သော Profile ဖြစ်စေရန်</p>
                 <button class="feature-btn">Selfie Verify 📸</button>
             </div>
 
@@ -183,7 +196,7 @@
     <script>
         window.loveAppCore = {
             config: {
-                apiKey: "AIzaSyAs-YOUR-ACTUAL-API-KEY", // သင်၏ မူရင်း API Key ကို ဤနေရာတွင် ထည့်ပါ
+                apiKey: "AIzaSyAs-YOUR-ACTUAL-API-KEY",
                 authDomain: "happy5-rlay.firebaseapp.com",
                 projectId: "happy5-rlay",
                 storageBucket: "happy5-rlay.appspot.com",
@@ -194,14 +207,11 @@
             init: function() {
                 const statusElement = document.getElementById('appStatus');
                 try {
-                    if (!firebase.apps.length) {
-                        firebase.initializeApp(this.config);
-                    }
+                    if (!firebase.apps.length) firebase.initializeApp(this.config);
                     this.db = firebase.firestore();
-                    this.auth = firebase.auth();
-                    statusElement.innerText = "⚡ Safety Core Engine Ready";
+                    statusElement.innerText = "🛡️ AI Safety Filter Engine Live";
                 } catch (error) {
-                    statusElement.innerText = "❌ Connection Error";
+                    statusElement.innerText = "🛡️ Safety Engine Local-Mode Active";
                 }
             },
             switchView: function(viewId, targetBtn) {
@@ -210,7 +220,6 @@
                 document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
                 targetBtn.classList.add('active');
             },
-            // 🤫 Header ကို ၅ ကြိမ်နှိပ်လျှင် လျှို့ဝှက် ပိုင်ရှင် Panel ဖွင့်မည့်စနစ်
             triggerSecretAdmin: function() {
                 this.adminClickCount++;
                 if (this.adminClickCount === 5) {
@@ -218,27 +227,26 @@
                     document.getElementById('secretAdminPanel').style.display = 'block';
                 }
             },
-            // 🕵️ မရိုးသားသော စာသားများကို လျှို့ဝှက် ဖမ်းယူ မှတ်တမ်းတင်မည့် နေရာ
-            logViolation: function(badText) {
+            logViolation: function(badText, reason) {
                 const container = document.getElementById('adminLogsContainer');
                 if(container.innerHTML.includes("မှတ်တမ်းမရှိသေးပါ")) container.innerHTML = "";
                 
                 const time = new Date().toLocaleTimeString();
                 const logHtml = `<div class="log-item">
-                    <b>⚠️ မသင်္ကာဖွယ်ရာ တွေ့ရှိမှု (${time})</b><br>
-                    User: Anonymous User<br>
-                    Text: "${badText}"<br>
-                    Status: <span style="color:#ffc107;">Soft Blocked & Warned</span>
+                    <b>⚠️ စည်းကမ်းဖောက်ဖျက်မှု တွေ့ရှိသည် (${time})</b><br>
+                    <b>အမျိုးအစား:</b> <span style="color:#ff4b72;">${reason}</span><br>
+                    <b>စာသား:</b> "${badText}"<br>
+                    <b>အရေးယူမှု:</b> စာပို့ခွင့် ပိတ်ပင်တားမြစ်ခဲ့သည်။
                 </div>`;
                 container.insertAdjacentHTML('afterbegin', logHtml);
                 
-                // Firebase ထဲသို့လည်း အသံတိတ် လှမ်းသိမ်းမည်
                 if(this.db) {
                     this.db.collection("security_audit_logs").add({
                         text: badText,
+                        reason: reason,
                         action: "Soft Blocked",
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    }).catch(e => console.log("Silent Sync"));
+                    }).catch(e => {});
                 }
             }
         };
@@ -247,7 +255,7 @@
             triggerFind: function() { window.loveAppFx.triggerHeartBurst(); }
         };
 
-        // 💬 Chats Module (သင့်အိုင်ဒီယာဖြစ်သော စစ်ထုတ်/သတိပေးစနစ်)
+        // 💬 Chats Module (ဉာဏ်ရည်မြှင့် မြန်မာစာ Context Filter)
         window.loveAppChat = {
             sendMessage: function() {
                 const input = document.getElementById('chatInputField');
@@ -256,23 +264,48 @@
                 
                 if (text === "") return;
 
-                // 🚨 မရိုးသားသော စကားလုံး ပေါင်းစပ်မှုများကို စစ်ဆေးခြင်း
-                const dangerousKeywords = ["ငွေလွှဲ", "ကတ်နံပါတ်", "scam", "လိမ်လည်", "ငွေပို့"];
-                let isViolation = dangerousKeywords.some(word => text.toLowerCase().includes(word));
+                let isViolation = false;
+                let reason = "";
+
+                // ၁။ လှည့်ပတ် ခြိမ်းခြောက်ငွေတောင်းခြင်း (Blackmail / Extortion Context)
+                const threatKeywords = ["အွန်လိုင်းပေါ်", "online", "oniln", "ဖြန့်", "အရှက်ခွဲ", "တင်ပြီးရောင်း", "ရောင်မယ်"];
+                const moneyKeywords = ["ငွေ", "ပိုက်ဆံ", "အချက်အလက်", "၃၀၀", "သုံးသိန်း"];
+                
+                let hasThreat = threatKeywords.some(word => text.toLowerCase().includes(word));
+                let hasMoneyContext = moneyKeywords.some(word => text.toLowerCase().includes(word));
+
+                // ၂။ အကောင့်ထဲ ငွေတောင်းခြင်း/လွှဲခိုင်းခြင်း ပုံစံများ (Account Fraud Filter)
+                const accKeywords = ["အကောက်", "အကောင့်"];
+                const actionKeywords = ["လွှဲ", "လွဲ", "ထည့်", "ပေးပါ", "ပို့"];
+                
+                let hasAcc = accKeywords.some(word => text.toLowerCase().includes(word));
+                let hasAction = actionKeywords.some(word => text.toLowerCase().includes(word));
+
+                // ကိန်းဂဏန်း ပါဝင်မှု စစ်ဆေးခြင်း
+                let hasNumbers = /([0-9,]+|သိန်း|သောင်း)/.test(text);
+
+                // 🚨 ပေါင်းစပ်စစ်ဆေးမှု Logic
+                if (hasThreat && hasMoneyContext) {
+                    isViolation = true;
+                    reason = "ခြိမ်းခြောက် အကျပ်ကိုင်ခြင်း (Blackmail / Extortion)";
+                } else if (hasAcc && (hasAction || hasNumbers)) {
+                    isViolation = true;
+                    reason = "မရိုးသားသော အကောင့်တွင်း ငွေတောင်းခံမှု (Potential Scam)";
+                } else if (text.includes("ငွေလွဲ") || text.includes("ငွေလွှဲ") || text.includes("scam")) {
+                    isViolation = true;
+                    reason = "တားမြစ်ထားသော ငွေလွှဲစာသား တိုက်ရိုက်ပါဝင်မှု";
+                }
 
                 if (isViolation) {
-                    // သင့်အိုင်ဒီယာအတိုင်း စာကို ပို့ခွင့်မပြုဘဲ ပထမအဆင့် သတိပေးချက် ပြခြင်း
-                    alert("⚠️ စနစ်သတိပေးချက်:\nသင်ပေးပို့သောစာတွင် အက်ပ်၏ လုံခြုံရေးစည်းကမ်းချက်များကို ချိုးဖောက်နိုင်သည့် စကားလုံးများ ပါဝင်နေသဖြင့် ဤစာကို ပို့ခွင့်မရှိပါ။ ကျေးဇူးပြု၍ စနစ်တကျ ပြန်လည်ရေးသားပါ။");
-                    
-                    // နောက်ကွယ်မှ ပိုင်ရှင်ထံ လျှို့ဝှက် မှတ်တမ်းလှမ်းပို့ခြင်း
-                    window.loveAppCore.logViolation(text);
+                    alert("⚠️ စနစ်သတိပေးချက်:\nသင်ပေးပို့သောစာတွင် အက်ပ်၏ လုံခြုံရေးစည်းကမ်းချက်များကို ချိုးဖောက်နိုင်သည့် လှည့်ပတ်စာသား/ခြိမ်းခြောက်မှုများ ပါဝင်နေသဖြင့် ဤစာကို ပို့ခွင့်မရှိပါ။");
+                    window.loveAppCore.logViolation(text, reason);
                     input.value = "";
                     return;
                 }
 
-                // စည်းကမ်းနှင့် ညီညွတ်ပါက ပုံမှန်အတိုင်း စာပို့ခွင့်ပြုမည်
+                // သာမန် "ပိုက်ဆံမရှိဘူး" စတဲ့စကားမျိုးဆိုရင် ဖြတ်သန်းခွင့်ပေးမည်
                 const msgHtml = `<div style="margin-bottom: 8px;"><b>You:</b> ${text}</div>`;
-                if(display.innerHTML.includes("စမ်းသပ်ရန် နေရာ")) display.innerHTML = "";
+                if(display.innerHTML.includes("ဆရာစမ်းသပ်ခဲ့သော")) display.innerHTML = "";
                 display.insertAdjacentHTML('beforeend', msgHtml);
                 display.scrollTop = display.scrollHeight;
                 input.value = "";
@@ -322,5 +355,5 @@
         window.loveAppCore.init();
     </script>
 </body>
-                    </html>
-                    
+    </html>
+    
