@@ -1,199 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>True Love Security Connect</title>
+<!-- Profile Page View အပိုင်းထဲတွင် ဤကုတ်ကို အစားထိုးထည့်သွင်းပါသည် -->
+<div id="view-profile" class="view-panel" style="text-align: center;">
+    <h3 style="margin-top: 20px;">My Verified Profile</h3>
+    <p style="color: #666; font-size: 13px;">Status: Active & Secured 🛡️</p>
     
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-    <style>
-        :root {
-            --primary-color: #ff4b72;
-            --accent-color: #ff7693;
-            --background-color: #fffafb;
-            --text-color: #2d2123;
-            --card-bg: #ffffff;
-        }
-        
-        * { box-sizing: border-box; }
-        
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f0f2f5;
-            color: var(--text-color);
-            margin: 0; padding: 0;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
-        }
-
-        .app-container {
-            width: 100%; max-width: 420px; height: 92vh;
-            background: var(--card-bg);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-            border-radius: 30px;
-            display: flex; flex-direction: column;
-            overflow: hidden; position: relative;
-        }
-
-        /* 🔐 Login & PIN Screen CSS */
-        .auth-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 2000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 30px; text-align: center;
-        }
-        .safety-banner {
-            background: #fff0f3; color: var(--primary-color);
-            padding: 15px; border-radius: 15px; border: 1px solid #ffe0e6;
-            font-size: 14px; line-height: 1.6; margin-bottom: 30px; font-weight: bold;
-        }
-        .pin-input {
-            width: 80%; padding: 15px; font-size: 20px; text-align: center;
-            letter-spacing: 10px; border: 2px solid #ddd; border-radius: 15px;
-            outline: none; margin-bottom: 20px;
-        }
-
-        /* Main App CSS */
-        .app-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: white; padding: 20px; text-align: center; font-weight: bold;
-        }
-        .app-header h1 { margin: 0; font-size: 18px; }
-
-        .app-content { flex: 1; padding: 20px; overflow-y: auto; }
-        .view-panel { display: none; width: 100%; height: 100%; }
-        .view-panel.active { display: block; }
-
-        .chat-box { width: 100%; border: 1px solid #f0e2e4; border-radius: 15px; height: 260px; padding: 10px; margin-bottom: 10px; background: #fafafa; overflow-y: auto; }
-        .chat-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
-
-        .feature-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: white; border: none; padding: 12px 25px;
-            font-size: 15px; font-weight: bold; border-radius: 25px; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 75, 114, 0.3); margin-top: 15px; width: 100%;
-        }
-        .logout-btn { background: #666; box-shadow: none; margin-top: 30px; }
-
-        .bottom-nav {
-            height: 70px; background: #ffffff; border-top: 1px solid #f0e2e4;
-            display: flex; justify-content: space-around; align-items: center;
-        }
-        .nav-item { background: none; border: none; color: #8c7b7d; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-        .nav-item.active { color: var(--primary-color); }
-    </style>
-</head>
-<body>
-
-    <div class="app-container">
-
-        <!-- 🔐 ဆရာအကြံပြုထားသော အကောင့်ဝင်ခြင်းနှင့် လျှို့ဝှက်နံပါတ် စစ်ဆေးသည့် မျက်နှာစာ -->
-        <div id="authScreen" class="auth-screen">
-            <!-- 🛡️ ဆင်ဆာ/လုံခြုံရေး ကတိကဝတ် စာသား -->
-            <div class="safety-banner">
-                🛡️ စနစ်သတိပေးချက် နှင့် ကတိကဝတ်<br>
-                ဤအက်ပ်သည် သာမန်သုံးစွဲသူများအတွက်မဟုတ်ဘဲ အချစ်စစ်ရှာဖွေသူများအတွက်သာ ဖြစ်ပြီး၊ သုံးစွဲသူများ ဘေးကင်းလုံခြုံမှုရှိစေရန် အပြည့်အဝ လုံခြုံရေးအကာအကွယ် ပေးထားပါသည်။
-            </div>
-            
-            <h3 style="margin-bottom: 10px; color: #444;">လျှို့ဝှက်နံပါတ် ရိုက်ထည့်ပါ</h3>
-            <p style="color: #888; font-size: 12px; margin-top: 0;">(စမ်းသပ်ရန် လျှို့ဝှက်နံပါတ် <b>1234</b> ကို ရိုက်ထည့်ပါ)</p>
-            
-            <input type="password" id="pinInputField" class="pin-input" maxlength="4" placeholder="••••">
-            <button class="feature-btn" onclick="window.loveAuth.verifyPIN()">အကောင့်သို့ဝင်ရန် 🚀</button>
-        </div>
-
-        <!-- App Header (အကောင့်ဝင်ပြီးမှ မြင်ရမည်) -->
-        <div class="app-header">
-            <h1>❤️ TRUE LOVE (အချစ်စစ်ရှာဖွေရာ)</h1>
-        </div>
-
-        <!-- Main Content -->
-        <div class="app-content">
-            <!-- ၁။ Discover Page -->
-            <div id="view-discover" class="view-panel active">
-                <div style="text-align: center; margin-top: 50px;">
-                    <h2 style="color: var(--primary-color);">ရှာဖွေမှုစတင်ရန်</h2>
-                    <p style="color:#666;">ရိုးသားပြီး စစ်မှန်သော ရေစက်များကို ဤနေရာတွင် ရှာဖွေပါ</p>
-                </div>
-            </div>
-
-            <!-- ၂။ Chat Page -->
-            <div id="view-chat" class="view-panel">
-                <div class="chat-box" id="chatDisplay">
-                    <div style="color: #aaa; text-align: center; font-size: 13px; margin-top: 20px;">စကားပြောခန်း စတင်နိုင်ပါပြီ။</div>
-                </div>
-                <div style="display: flex; gap: 5px;">
-                    <input type="text" id="chatInputField" class="chat-input" placeholder="စာတိုရိုက်ပါ...">
-                    <button class="feature-btn" style="margin:0; width:auto;" onclick="window.loveChat.sendMessage()">Send</button>
-                </div>
-            </div>
-
-            <!-- ၃။ Profile Page (ဆရာအကြံပြုထားသော အကောင့်ထွက်ခြင်းခလုတ် ထည့်သွင်းထားသည်) -->
-            <div id="view-profile" class="view-panel" style="text-align: center;">
-                <h3 style="margin-top: 40px;">My Verified Profile</h3>
-                <p style="color: #666;">Status: Active & Secured 🛡️</p>
-                
-                <!-- 🚪 အကောင့်ထွက်ခြင်း ခလုတ် -->
-                <button class="feature-btn logout-btn" onclick="window.loveAuth.logoutAccount()">🚪 အကောင့်မှထွက်ရန် (Logout)</button>
-            </div>
-        </div>
-
-        <!-- Bottom Navigation -->
-        <div class="bottom-nav">
-            <button class="nav-item active" onclick="window.loveCore.switchView('discover', this)">Discover</button>
-            <button class="nav-item" onclick="window.loveCore.switchView('chat', this)">Chats</button>
-            <button class="nav-item" onclick="window.loveCore.switchView('profile', this)">Profile</button>
-        </div>
+    <!-- 📸 ဆရာကြီး အကြံပြုထားသော Selfie ကင်မရာ Area -->
+    <div style="margin: 20px auto; width: 200px; height: 200px; border-radius: 50%; border: 4px solid var(--primary-color); overflow: hidden; background: #eee; position: relative;">
+        <video id="webcamVideo" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: none;"></video>
+        <canvas id="capturedCanvas" style="width: 100%; height: 100%; object-fit: cover; display: none;"></canvas>
+        <div id="camPlaceholder" style="padding-top: 80px; color: #aaa; font-size: 14px;">ဓာတ်ပုံမရှိသေးပါ</div>
     </div>
 
-    <script>
-        // 🔐 Auth Module (ဆရာ့စိတ်ကူးကို အကောင်အထည်ဖော်ထားသော နေရာ)
-        window.loveAuth = {
-            correctPIN: "1234",
-            verifyPIN: function() {
-                const pin = document.getElementById('pinInputField').value;
-                if(pin === this.correctPIN) {
-                    document.getElementById('authScreen').style.display = 'none';
-                    alert("🔓 လျှို့ဝှက်နံပါတ် မှန်ကန်ပါသည်။ အက်ပ်ကို စိတ်ချစွာ သုံးစွဲနိုင်ပါပြီ။");
-                } else {
-                    alert("❌ လျှို့ဝှက်နံပါတ် မှားယွင်းနေပါသည်။ ပြန်လည် ကြိုးစားပါ။");
-                    document.getElementById('pinInputField').value = "";
-                }
-            },
-            logoutAccount: function() {
-                document.getElementById('pinInputField').value = "";
-                document.getElementById('authScreen').style.display = 'flex';
-                window.loveCore.switchView('discover', document.querySelectorAll('.nav-item')[0]);
-                alert("🚪 အကောင့်ထဲမှ ဘေးကင်းစွာ ထွက်လိုက်ပါပြီ။");
-            }
-        };
+    <button class="feature-btn" style="width: 80%; background: #4caf50;" onclick="window.loveCamera.startCamera()">📷 ကင်မရာ ဖွင့်ရန်</button>
+    <button class="feature-btn" style="width: 80%; background: #2196f3; display:none;" id="snapBtn" onclick="window.loveCamera.takeSnapshot()">📸 Selfie ရိုက်မည် (Filter Active)</button>
+    
+    <!-- 🚪 အကောင့်ထွက်ခြင်း ခလုတ် -->
+    <button class="feature-btn logout-btn" style="width: 80%;" onclick="window.loveAuth.logoutAccount()">🚪 အကောင့်မှထွက်ရန် (Logout)</button>
+</div>
 
-        window.loveCore = {
-            switchView: function(viewId, targetBtn) {
-                document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
-                document.getElementById('view-' + viewId).classList.add('active');
-                document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-                targetBtn.classList.add('active');
-            }
-        };
+<script>
+// JavaScript အပိုင်းထဲတွင် အောက်ပါ Camera Module ကို ထည့်သွင်းထားပါသည်
+window.loveCamera = {
+    streamObj: null,
+    startCamera: function() {
+        const video = document.getElementById('webcamVideo');
+        const placeholder = document.getElementById('camPlaceholder');
+        const snapBtn = document.getElementById('snapBtn');
+        const canvas = document.getElementById('capturedCanvas');
 
-        window.loveChat = {
-            sendMessage: function() {
-                const input = document.getElementById('chatInputField');
-                const display = document.getElementById('chatDisplay');
-                if (input.value.trim() === "") return;
-                
-                // (ရှေ့က အဆင့်မြှင့်ထားသော လုံခြုံရေး စစ်ထုတ်မှု Engine ကုတ်များ ဤနေရာတွင် အလုပ်လုပ်မည်)
-                const msgHtml = `<div><b>You:</b> ${input.value}</div>`;
-                display.insertAdjacentHTML('beforeend', msgHtml);
-                input.value = "";
-                display.scrollTop = display.scrollHeight;
-            }
-        };
+        canvas.style.display = 'none';
+        placeholder.style.display = 'none';
+        video.style.display = 'block';
+
+        // ဖုန်း သို့မဟုတ် ကွန်ပျူတာ၏ ရှေ့ကင်မရာကို လှမ်းခေါ်ခြင်း
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
+        .then(function(stream) {
+            window.loveCamera.streamObj = stream;
+            video.srcObject = stream;
+            snapBtn.style.display = 'inline-block';
+        })
+        .catch(function(err) {
+            alert("❌ ကင်မရာဖွင့်ခွင့် မရရှိပါ သို့မဟုတ် ကင်မရာ မရှိပါဗျာ။");
+            placeholder.style.display = 'block';
+            video.style.display = 'none';
+        });
+    },
+    takeSnapshot: function() {
+        const video = document.getElementById('webcamVideo');
+        const canvas = document.getElementById('capturedCanvas');
+        const snapBtn = document.getElementById('snapBtn');
+        const context = canvas.getContext('2d');
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        // 🌟 Natural Beauty Filter (Brightness & Contrast Effect မြှင့်တင်ခြင်း)
+        context.filter = "brightness(1.08) contrast(1.02) saturate(1.05)";
+        
+        // ကင်မရာထဲက ပုံရိပ်ကို Canvas ပေါ် ဆွဲတင်လိုက်ခြင်း
+        context.translate(canvas.width, 0);
+        context.scale(-1, 1); // မျက်နှာပြန်လှန်ပေးခြင်း (Mirror Effect)
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // ကင်မရာ ပြန်ပိတ်ခြင်း
+        if(this.streamObj) {
+            this.streamObj.getTracks().forEach(track => track.stop());
+        }
+
+        video.style.display = 'none';
+        canvas.style.display = 'block';
+        snapBtn.style.display = 'none';
+        alert("✨ Selfie ဓာတ်ပုံကို လုံုံခြုံစွာ မှတ်တမ်းတင်ပြီးပါပြီ (Beauty Filter သက်ရောက်ထားပါသည်)။");
+    }
+};
     </script>
-</body>
-    </html>
     
