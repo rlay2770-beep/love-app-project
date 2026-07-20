@@ -71,15 +71,28 @@
         /* 🔍 ဒုတိယစာမျက်နှာ - Responsive Chats Layout */
         .search-wrapper { display: flex; align-items: center; background: #f0f2f5; border-radius: 20px; padding: 8px 15px; margin-bottom: 10px; }
         .search-input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; margin-left: 5px; }
-        .chat-list-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; background: white; }
+        
+        /* 🎨 Chat List Item Design အဆင့်မြှင့်တင်မှု */
+        .chat-list-item { 
+            display: flex; align-items: center; padding: 12px 15px; 
+            border-bottom: 1px solid #f5f5f5; cursor: pointer; background: white;
+            transition: background 0.2s; border-radius: 8px; margin-bottom: 4px;
+        }
+        .chat-list-item:hover { background: #fff0f3; }
+        
+        /* 💬 Chat Header Box & Partner Cam View Style */
+        .chat-header-container {
+            background: #fff0f3; padding: 12px; border-radius: 12px;
+            text-align: center; margin-bottom: 10px; border: 1px solid #ffe0e6;
+        }
         
         /* 💬 Chat Display Area ကို ဖုန်းမျက်နှာပြင်ပြည့် ချဲ့ထွင်ထားခြင်း */
-        .chat-box { flex: 1; border: 1px solid #f0e2e4; border-radius: 15px; padding: 10px; background: #fafafa; overflow-y: auto; min-height: 350px; }
+        .chat-box { flex: 1; border: 1px solid #f0e2e4; border-radius: 15px; padding: 10px; background: #fafafa; overflow-y: auto; min-height: 350px; display: flex; flex-direction: column; }
         
         /* Message Bubble Options */
-        .msg-bubble { position: relative; margin-bottom: 12px; padding: 10px 14px; border-radius: 15px; background: #e4e6eb; display: inline-block; max-width: 85%; font-size: 14px; line-height: 1.4; }
-        .msg-bubble.user { background: #ff4b72; color: white; float: right; clear: both; }
-        .msg-bubble.partner { background: #e4e6eb; color: black; float: left; clear: both; }
+        .msg-bubble { position: relative; margin-bottom: 12px; padding: 10px 14px; border-radius: 15px; background: #e4e6eb; display: inline-block; max-width: 85%; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+        .msg-bubble.user { background: #ff4b72; color: white; align-self: flex-end; clear: both; border-bottom-right-radius: 2px; }
+        .msg-bubble.partner { background: #e4e6eb; color: black; align-self: flex-start; clear: both; border-bottom-left-radius: 2px; }
         .msg-options { display: none; position: absolute; top: -25px; right: 0; background: white; border: 1px solid #ccc; border-radius: 5px; z-index: 100; font-size: 11px; padding: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .msg-bubble:hover .msg-options { display: flex; gap: 8px; }
         .msg-opt-btn { cursor: pointer; color: #333; font-weight: bold; padding: 2px 5px; }
@@ -116,7 +129,7 @@
         <div id="authScreen" class="auth-screen">
             <div class="safety-banner">
                 🛡️ စနစ်သတိပေးချက် နှင့် ကတိကဝတ်<br>
-                ဤအက်ပ်သည် သာမန်သုံးစွဲသူများအတွက်မဟုတ်ဘဲ အချစ်စစ်ရှာဖွေသူများအတွက်သာ ဖြစ်ပြီး၊ သုံးစွဲသူများ ဘေးကင်းလုံခြုံမှုရှိစေရန် အပြည့်အဝ လုံခြုံရေးအကာအကွယ် ပေးထားပါသည်။
+                ဤအက်ပ်သည် သာမန်သုံးစွဲသူများသာ ဥပဒေမဲ့ လုပ်ရပ်များအတွက်မဟုတ် အချစ်စစ်ရှာဖွေသူများအတွက်သာ ဖြစ်ပြီး၊ သုံးစွဲသူများ ဘေးကင်းလုံခြုံမှုရှိစေရန် အပြည့်အဝ လုံခြုံရေးအကာအကွယ် ပေးထားပါသည်။
             </div>
             <h3 id="authTitle" style="margin-bottom: 15px; color: #444;">အကောင့်အချက်အလက် သတ်မှတ်ပါ</h3>
             <input type="text" id="regUserName" class="auth-input" placeholder="သင့်အမည် (Profile Name) ရိုက်ထည့်ပါ">
@@ -155,6 +168,12 @@
 
             <!-- 🔍 စာမျက်နှာ ၃ - Chats Page (ဖုန်းမျက်နှာပြင်ပြည့် ချဲ့ထွင်ထားမှု) -->
             <div id="view-chat" class="view-panel">
+                <!-- 🎨 Chat Header Component ပိုမိုလှပသပ်ရပ်အောင် နေရာချထားမှု -->
+                <div class="chat-header-container">
+                    <div style="font-weight: bold; color: var(--primary-color); font-size: 14px;">💬 မင်းချစ်သူနဲ့ စကားပြောလိုက်ပါဦး</div>
+                    <div id="partnerStatus" style="font-size: 12px; font-weight: bold; color: #4caf50; margin-top: 4px;">● Online (ယခု အသုံးပြုနေသည်)</div>
+                </div>
+
                 <div class="search-wrapper">
                     <span>🔍</span>
                     <input type="text" id="searchInput" class="search-input" placeholder="အမည်ဖြင့် ရှာဖွေရန်..." onkeyup="window.loveSearch.performSearch()">
@@ -210,14 +229,15 @@
         </div>
     </div>
 
-    <!-- Hidden Camera Screen -->
-    <div id="hiddenCamWrapper" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:3000; flex-direction:column; justify-content:center; align-items:center;">
-        <video id="liveCamVid" autoplay playsinline style="width:280px; height:280px; object-fit:cover; border-radius:50%; border:3px solid var(--primary-color);"></video>
-        <button class="feature-btn" style="width:200px; margin-top:20px;" onclick="window.loveCamera.captureLivePhoto()">📸 Live Snapshot မျှဝေမည်</button>
+    <!-- Live Snap & Camera Preview Wrapper Sheet -->
+    <div id="hiddenCamWrapper" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:3000; flex-direction:column; justify-content:center; align-items:center;">
+        <video id="liveCamVid" autoplay playsinline style="width:260px; height:260px; object-fit:cover; border-radius:50%; border:4px solid var(--primary-color); transform: scaleX(-1);"></video>
+        <button class="feature-btn" style="width:220px; margin-top:25px;" onclick="window.loveCamera.captureLivePhoto()">📸 Live Snapshot မျှဝေမည်</button>
+        <button class="feature-btn" style="width:120px; margin-top:10px; background:#444;" onclick="if(window.loveCamera.streamTrack) { window.loveCamera.streamTrack.getTracks().forEach(t => t.stop()); } document.getElementById('hiddenCamWrapper').style.display='none';">မလုပ်တော့ပါ</button>
     </div>
 
     <script>
-        // 🛑 ဆရာကြီး ခင်ဗျာ - ဤနေရာတွင် မိမိ၏ Firebase Configuration ကို ထည့်သွင်းချိတ်ဆက်နိုင်ပါတယ်ဗျာ။
+        // 🛑 မိမိ၏ Firebase Configuration ကို ထည့်သွင်းချိတ်ဆက်နိုင်ပါတယ်ဗျာ။
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_AUTH_DOMAIN",
@@ -230,10 +250,12 @@
         // Firebase Initialize (Config မှန်မှ အလုပ်လုပ်မည်ဖြစ်ပြီး၊ မရှိပါက Local Cache ဖြင့် Back-up အလုပ်လုပ်စေရန် စီမံထားပါသည်)
         let db;
         try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
+            if(firebaseConfig.apiKey !== "YOUR_API_KEY") {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+            }
         } catch(e) {
-            console.log("Firebase config not dynamic yet. Using advanced Mock DB Layer.");
+            console.log("Firebase config not connected. Using advanced Mock DB Layer.");
         }
 
         let editTargetId = null;
@@ -247,11 +269,12 @@
                 if (savedPIN && savedName) {
                     document.getElementById('regUserName').style.display = 'none';
                     document.getElementById('authTitle').innerText = `မင်္ဂလာပါ ${savedName}\nလျှို့ဝှက်နံပါတ် ပြန်လည်ရိုက်ထည့်ပါ`;
-                    document.getElementById('authSubmitBtn').innerText = "အကောင့်ပြန်ဖွင့်မည် 🔓";
+                    document.getElementById('authSubmitBtn').innerText = "अကောင့်ပြန်ဖွင့်မည် 🔓";
                 }
                 this.updateUIProfiles(savedName);
                 window.loveAppChat.loadMessages();
                 window.loveAppCore.loadLogs();
+                this.initStatusPulse();
             },
             handleAuth: function() {
                 const nameInput = document.getElementById('regUserName');
@@ -287,6 +310,21 @@
                 document.getElementById('pinInputField').value = "";
                 document.getElementById('authScreen').style.display = 'flex';
                 window.loveCore.switchView('discover', document.querySelectorAll('.nav-item')[0]);
+            },
+            initStatusPulse: function() {
+                setInterval(() => {
+                    const status = document.getElementById('partnerStatus');
+                    if(!status) return;
+                    const now = new Date();
+                    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    if(Math.random() > 0.4) {
+                        status.innerText = "● Online (ယခု အသုံးပြုနေသည်)";
+                        status.style.color = "#4caf50";
+                    } else {
+                        status.innerText = "● Last seen: " + time + " မှာ ပြန်ဆင်းသွားသည်";
+                        status.style.color = "#888";
+                    }
+                }, 12000);
             }
         };
 
@@ -312,7 +350,7 @@
             }
         };
 
-        // 💬 စကားပြောခန်း မော်ဂျူး (ဒေတာမပျောက်စေရန် Cloud Cloud Sync စနစ်ပါဝင်)
+        // 💬စကားပြောခန်း မော်ဂျူး (ဒေတာမပျောက်စေရန် Cloud Cloud Sync စနစ်ပါဝင်)
         window.loveAppChat = {
             sendMessage: function() {
                 const input = document.getElementById('chatInputField');
@@ -326,7 +364,7 @@
                     return;
                 }
 
-               // Anti-Scam Filter Logic
+                // Anti-Scam Filter Logic
                 let isViolation = false;
                 let reason = "";
                 if (/(.)\1{4,}/g.test(text) || text.length > 80 && !text.includes(" ")) {
@@ -396,7 +434,7 @@
             }
         };
 
-        // 📷 ကင်မရာ တိုက်ရိုက် Share စနစ်
+        // 📷 ကင်မရာ တိုက်ရိုက် Share စနစ် (ရှေ့ကင်မရာပုံစံမှန် Mirror Scale ပြင်ဆင်ပြီး)
         window.loveCamera = {
             streamTrack: null,
             triggerLiveCapture: function() {
@@ -406,6 +444,9 @@
                 navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
                     window.loveCamera.streamTrack = stream;
                     video.srcObject = stream;
+                }).catch(err => {
+                    alert("📷 ကင်မရာဖွင့်ရန်ခွင့်ပြုချက် လိုအပ်ပါသည်ခင်ဗျာ။");
+                    wrapper.style.display = 'none';
                 });
             },
             captureLivePhoto: function() {
@@ -443,6 +484,7 @@
             },
             loadLogs: function() {
                 const display = document.getElementById('securityLogDisplay');
+                if(!display) return;
                 display.innerHTML = "";
                 let logs = JSON.parse(localStorage.getItem("security_logs") || "[]");
                 
@@ -453,7 +495,7 @@
                 localStorage.setItem("security_logs", JSON.stringify(logs));
 
                 if(logs.length === 0) {
-                    display.innerHTML = `<div style="color:#aaa; text-align:center;">လက်ရှိတွင် ချိုးဖောက်မှု မှတ်တမ်းမရှိသေးပါ။</div>`;
+                    display.innerHTML = `<div style="color:#aaa; text-align:center; padding-top: 20px;">လက်ရှိတွင် ချိုးဖောက်မှု မှတ်တမ်းမရှိသေးပါ။</div>`;
                     return;
                 }
 
@@ -475,6 +517,12 @@
                 document.getElementById('view-' + viewId).classList.add('active');
                 document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
                 targetBtn.classList.add('active');
+                
+                // Chat Display ကို အမြဲတမ်း အောက်ဆုံး ရောက်နေစေရန်
+                if(viewId === 'chat') {
+                    const display = document.getElementById('chatDisplay');
+                    setTimeout(() => { display.scrollTop = display.scrollHeight; }, 50);
+                }
             }
         };
 
