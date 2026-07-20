@@ -129,15 +129,13 @@
         <div id="authScreen" class="auth-screen">
             <div class="safety-banner">
                 🛡️ စနစ်သတိပေးချက် နှင့် ကတိကဝတ်<br>
-                ဤအက်ပ်သည် သာမန်သုံးစွဲသူများသာ ဥပဒေမဲ့ လုပ်ရပ်များအတွက်မဟုတ် အချစ်စစ်ရှာဖွေသူများအတွက်သာ ဖြစ်ပြီး၊ သုံးစွဲသူများ ဘေးကင်းလုံခြုံမှုရှိစေရန် အပြည့်အဝ လုံခြုံရေးအကာအကွယ် ပေးထားပါသည်။
+                ဤအက်ပ်သည် သာမန်သုံးစွဲသူများသာ ဥပဒေမဲ့ လုပ်ရပ်များအတွက်မဟုတ် အချစ်စစ်ရှာဖွေသူများနှင့်မိသားစုဝင်များအတွက်သာ ဖြစ်ပြီး၊ သုံးစွဲသူများ ဘေးကင်းလုံခြုံမှုရှိစေရန် အပြည့်အဝ လုံခြုံရေးအကာအကွယ် ပေးထားပါသည်။ သို့သော်တစ်ရာ ရာခိုင်နှုန်းတိကြသည် ဟုလည်းမဆိုလို လိုအပ်ပါကတိုင်ကြားနိုင်ပါသည်။
             </div>
             <h3 id="authTitle" style="margin-bottom: 15px; color: #444;">အကောင့်အချက်အလက် သတ်မှတ်ပါ</h3>
             <input type="text" id="regUserName" class="auth-input" placeholder="သင့်အမည် (Profile Name) ရိုက်ထည့်ပါ">
             <input type="password" id="pinInputField" class="pin-input" maxlength="4" placeholder="••••">
             <button id="authSubmitBtn" class="feature-btn" onclick="window.loveAuth.handleAuth()">အကောင့်တည်ဆောက်ပြီး ဝင်ရောက်ရန် 🚀</button>
-        </div>
-
-        <!-- App Header -->
+     သို့သော်တရာ        <!-- App Header -->
         <div class="app-header">
             <h1>❤️ TRUE LOVE (အချစ်စစ်ရှာဖွေရာ)</h1>
         </div>
@@ -149,7 +147,7 @@
             <div id="view-discover" class="view-panel active">
                 <div style="text-align: center; margin-top: 20px; flex: 1;">
                     <h2 style="color: var(--primary-color); margin-bottom: 5px;">ရှာဖွေမှုစတင်ရန်</h2>
-                    <p style="color:#666; margin-top: 0; font-size: 13px;">ရိုးသားပြီး စစ်မှန်သော ရေစက်များကို ဤနေရာတွင် ရှာဖွေပါ</p>
+                    <p style="color:#666; margin-top: 0; font-size: 13px;">ရိုးသားပြီး စစ်မှန်သော သင့်ချစ်သူနှင့်စကားပြောပါ ဤနေရာတွင် ရှာဖွေပါ</p>
                     <div style="background: #fff5f7; padding: 12px; border-radius: 10px; font-weight:bold; margin-bottom: 20px;">
                         မင်္ဂလာပါ - <span id="displayUserName" style="color:var(--primary-color);">Admin RLay</span> ✨
                     </div>
@@ -239,13 +237,14 @@
     <script>
         // 🛑 မိမိ၏ Firebase Configuration ကို ထည့်သွင်းချိတ်ဆက်နိုင်ပါတယ်ဗျာ။
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+  apiKey: "AIzaSyAQa09pbXVR_03lrPRZUM3o0AScBJPvo6A",
+  authDomain: "love-app-project-62625.firebaseapp.com",
+  projectId: "love-app-project-62625",
+  storageBucket: "love-app-project-62625.firebasestorage.app",
+  messagingSenderId: "879659476952",
+  appId: "1:879659476952:web:74aa1f057e292cc6da34ad",
+  measurementId: "G-QFEQH63STJ"
+};
         
         // Firebase Initialize (Config မှန်မှ အလုပ်လုပ်မည်ဖြစ်ပြီး၊ မရှိပါက Local Cache ဖြင့် Back-up အလုပ်လုပ်စေရန် စီမံထားပါသည်)
         let db;
